@@ -1,0 +1,47 @@
+
+# This requires ImageMagik's convert be installed in your PATH
+# That's debian package imagemagick
+
+function usage()
+{
+    cat << EOF
+  Usage: @PROG@ IN_IMAGE_FILE [OUT_IMAGE_FILE]
+
+  Make an image file that is @DESC@.
+
+  If OUT_IMAGE_FILE is not given, this will replace the IN_IMAGE_FILE with
+  a file that is @DESC@.
+
+  If OUT_IMAGE_FILE is given IN_IMAGE_FILE will not be replaced and
+  OUT_IMAGE_FILE will 
+
+EOF
+  exit 1
+}
+
+[ -n "$3" ] && usage
+[ -z "$1" ] && usage
+[[ "$1" = -* ]] && usage
+[[ "$2" = -* ]] && usage
+
+
+if [ -n "$2" ] ; then
+    convert @OPERATION@ "$1" "$2"
+    exit $?
+fi
+
+
+suffix=".${1##*.}"
+
+tmpfile="$(tempfile --suffix $suffix)" && \
+convert @OPERATION@ "$1" ${tmpfile}
+
+ret=$?
+
+if [ "$?" = 0 ] ; then
+    mv -f ${tmpfile} "$1"
+else
+    rm -f ${tmpfile}
+    echo "$0 $* FAILED"
+fi
+exit $?

@@ -1,0 +1,59 @@
+#!/bin/sh
+
+Usage ()
+{
+    [ -n "$1" ] && echo -e "$1"
+    cat << EOF
+  Usage: $0 IMAGE_IN_FILE IMAGE_OUT_FILE
+
+  Takes IMAGE_IN_FILE and makes OUT_FILE, an image two times longer and
+  two times taller that has \"wall paper\" matched edges.  It uses the
+  ImageMagick program convert, and the tempfile program.  IMAGE_OUT_FILE
+  must have a suffix that convert can work with.
+
+EOF
+  exit 1 
+}
+
+[ -n "$2" ] || Usage
+[ -z "$3" ] || Usage
+
+if ! which convert > /dev/null || ! which tempfile > /dev/null
+then
+  echo -e "Can't find convert or tempfile in your PATH\n"
+  Usage
+fi
+
+args="$*"
+suffix=".${2##*.}"
+
+
+FAIL()
+{
+    echo "$0 $args Failed line: ${BASH_LINENO[0]}"
+    [ -n "$tmp1" ] && rm -f $tmp1 $tmp2 $tmp3 $tmp4 $tmp5 $tmp6
+    exit 1
+}
+
+
+[ -e "$2" ] && FAIL "ERROR: file $2 exists\n"
+
+[ "$1" = "$2" ] && FAIL "ERROR: won't overwrite $1\n"
+
+
+tmp1=$(tempfile --suffix=1$suffix) || FAIL
+tmp2=$(tempfile --suffix=2$suffix) || FAIL
+tmp3=$(tempfile --suffix=3$suffix) || FAIL
+tmp4=$(tempfile --suffix=4$suffix) || FAIL
+tmp5=$(tempfile --suffix=5$suffix) || FAIL
+tmp6=$(tempfile --suffix=6$suffix) || FAIL
+
+convert $1 $tmp1 || FAIL
+convert -flop $1 $tmp2 || FAIL
+convert -flip $1 $tmp3 || FAIL
+convert -flip $tmp2 $tmp4 || FAIL
+convert $tmp1 $tmp2 +append $tmp5 || FAIL
+convert $tmp3 $tmp4 +append $tmp6 || FAIL
+convert $tmp5 $tmp6 -append $2 || FAIL
+
+rm -f $tmp1 $tmp2 $tmp3 $tmp4 $tmp5 $tmp6

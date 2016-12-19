@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# Convert a markdown file to HTML via the github.com web API
+# ref: https://developer.github.com/v3/markdown/
+
+function Usage()
+{
+    cat << EOF
+
+  Usage: $(basename $0) INFILE.md [--just_print]|[-h|--help] 
+
+    Read markdown file INFILE.md and display it on your default browser.
+
+    You should not have to push your markdown files to github to see if
+    they will look good on github.  This uses the github web API to create
+    HTML and then displays it in your browser, and then removes the
+    generated HTML.
+
+
+        ------------------------ OPTIONS ----------------------------
+
+
+       -h|--help      print this help and exit 1
+
+       --just_print   just print the generated HTML to stdout
+
+
+EOF
+
+    exit 1
+}
+
+[ -z "$1" ] && Usage
+
+file=
+tmp_file=
+just_print=
+
+# parse options
+while [ -n "$1" ] ; do
+
+    case "$1" in
+        
+        --just_print|-just_print)
+            just_print=yes
+            ;;
+        -h|--help|-help)
+            Usage
+            ;;
+        -*)
+            echo -e "\n  Unknown option: \"$1\""
+            Usage
+            ;;
+        *)
+            file="$1"
+            ;;
+    esac
+    shift 1
+done
+
+[ -z "$file" ] && Usage
+if [ ! -e "$file" ] ; then
+    echo -e "\n  File \"$file\" does not exist";
+    Usage
+fi
+
+
+# ref: https://developer.github.com/v3/markdown/
+run="curl -X POST -H Content-Type:text/x-markdown\
+ https://api.github.com/markdown/raw --data-binary @$file"
+
+
+# curl -bla -bla BLA | tee file
+#   or
+# curl -bla -bla BLA
+
+if [ -n "$just_print" ] ; then
+    echo "$run"
+    $run
+    exit $?
+fi
+
+tmp_file=$(mktemp --suffix .html) || exit 1
+
+
+function delayCleanup()
+{
+    # Browsers are slow to load files, so we need to wait before removing
+    # the temp file.  We have no simple way to know how long to wait;
+    # better late than too soon.
+    sleep 10
+    rm $tmp_file
+    #echo "cleaned up"
+}
+
+set -x
+$run | tee $tmp_file
+# open file in browser
+xdg-open $tmp_file
+set +x
+ret=$?
+delayCleanup &
+# In this case success is not determined from the last command that ran.
+exit $ret

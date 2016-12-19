@@ -1,0 +1,148 @@
+#! /bin/bash
+
+program="$(basename $0)"
+
+function usage()
+{
+    cat << EOF
+  Usages:
+           $program [-C CC_OPTS | -H LOC_HEADER_FILE | -S SYS_HEADER_FILE] STRUCT
+
+           $program [-h|--help]
+
+    Prints the size in bytes of STRUCT when STRUCT is compiled as C code
+    for both 64 bit and 32 bit compilers.
+
+        OPTIONS
+
+    -C CC_OPTS             add CC_OPTS to the compile command (cc)
+
+    -H LOC_HEADER_FILE     add #include "LOC_HEADER_FILE" to the code
+
+    -S SYS_HEADER_FILE     add #include <SYS_HEADER_FILE> to the code
+
+
+    Examples commands:
+
+      $program long
+
+      $program "struct { long a; char b; }"
+      
+      $program "struct { struct timespec t; int i; }"
+
+      $program "struct { struct timespec t; uint64_t i; }"
+
+EOF
+
+    exit 1
+}
+
+LOC_HEADER_FILE=
+SYS_HEADER_FILE=
+CC_OPTS=" "
+TYPE=
+
+if [ -z "$1" ] ; then
+	usage
+fi
+
+while [ -n "$1" ] ; do
+
+    case "$1" in
+        
+        -H)
+            shift
+            [ -n "$1" ] || usage
+            LOC_HEADER_FILE="$LOC_HEADER_FILE $1"
+            ;;
+        -C)
+            shift
+            [ -n "$1" ] || usage
+            CC_OPTS="$CC_OPTS $1"
+            ;;
+        -S)
+            shift
+            [ -n "$1" ] || usage
+            SYS_HEADER_FILE="$LOC_HEADER_FILE $1"
+            ;;
+        -*)
+            usage
+            ;;
+        *)
+            if [ -n "$TYPE" ] ; then
+                TYPE="${TYPE} $1"
+            else
+                TYPE="$1"
+            fi
+            ;;
+    esac
+
+    shift
+done
+
+[ -z "$TYPE" ] && usage
+
+
+tmpdir="$(mktemp -d)"
+cfile="$tmpdir/x.c"
+xfile="${cfile%.c}"
+
+cat >> $cfile << EOF
+#define _GNU_SOURCE
+#define _LARGEFILE_SOURCE
+#include <stdio.h>
+#include <sys/epoll.h>
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include <semaphore.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
+#include <sys/msg.h>
+#include <pthread.h>
+#include <time.h>
+#include <sys/time.h>
+#include <setjmp.h>
+#include <gnutls/gnutls.h>
+EOF
+
+for f in $LOC_HEADER_FILE ; do
+    echo -e "#include \"$f\""
+done
+
+for f in $SYS_HEADER_FILE ; do
+    echo -e "#include <$f>"
+done
+
+cat >> $cfile << EOF
+
+int main(void)
+{
+EOF
+cat >> $cfile << EOF
+    printf("bit sizeof( $TYPE ) = %zu\n",
+	sizeof($TYPE)
+    );
+EOF
+echo -e "return 0;\n}" >> $cfile
+
+for bit in 64 32 ; do
+	rm -f $xfile
+	run="gcc ${CFLAGS} -m${bit}${CC_OPTS} -o $xfile $cfile -lpthread"
+	if $run ; then
+		echo -n "${bit} "
+		$xfile
+		rm -f $xfile
+	else
+		echo -e "$run FAILED\n"
+                cat $cfile
+                rm -rf "$tmpdir"
+		exit 1
+	fi
+done
+rm -rf "$tmpdir"
+

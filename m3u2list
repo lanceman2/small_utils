@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -n "$1" ] ; then
+	echo "Usage: $0 < M3U_FILE | dos2unix"
+    echo "  Reads stdin and writes stdout"
+    echo "example % cat 00.m3u | dos2unix | $0 > 00.txt"
+    exit 1
+fi
+
+#echo "#EXTM3U"
+#echo "#EXTINF:0,${count}"
+
+while read -r a ; do
+    echo -E "${a}" | grep -v '#EXT' | sed -e 's/\\/\//g'
+done

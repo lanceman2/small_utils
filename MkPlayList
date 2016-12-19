@@ -1,0 +1,55 @@
+#!/bin/bash
+
+
+PLAYLIST_DIR=${HOME}/Music/Playlists
+
+MNT=/mnt
+
+TO_DIR="$MNT/Music/Playlists"
+
+DIRS="$TO_DIR"
+
+function usage
+{
+    echo "Usage: $0 FILE_LIST.TXT"
+    exit 1
+}
+
+if [ -z "$1" ] ; then
+    usage
+fi
+
+playlistfile="${1%%.txt}.m3u"
+
+if [ -e "$playlistfile" ] ; then
+    echo "output file $playlistfile exists"
+    usage
+fi
+
+IFS=$'\n'
+for file in $(cat $1) ; do
+
+    got_it=
+    for dir in ${DIRS} ; do
+	if [ -e $dir/$file ] ; then
+	    got_it=yes
+	fi
+    done
+
+    if [ -z "$got_it" ] ; then
+	mkdir -p $(dirname $TO_DIR/$file)
+	run="cp \"$file\" \"$TO_DIR/$file\""
+	echo "$run"
+	$run
+    else
+        continue
+	# echo "HAVE: $file"
+    fi
+
+done
+
+
+list2m3u.bash < ${1} | unix2dos > $playlistfile
+
+cp $playlistfile $TO_DIR
+

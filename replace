@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#usage replace old new file*
+
+function usage()
+{
+    echo "$0 old new FILE [FILES]"
+    exit 1
+}
+
+[ -n "$3" ] || usage
+
+old=$1
+shift
+new=$1
+shift
+
+# use this if you do not want to use regexps
+exec perl -pi~ -e "\$old=\"$old\";\$new=\"$new\";"'$old =~ s/([^\w\s])/\\$1/g;s/$old/$new/g' $*
+
+# this one is for regexps
+#exec perl -pi~ -e "\$old=\"$old\";\$new=\"$new\";"'s/$old/$new/g' $*
+
+# this one won't escape anything
+#exec perl -pi~ -e "s/$old/$new/g" $*
+

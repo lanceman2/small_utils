@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# You'll need to check that the .wav sound files exist, if not use
+# other sound files.
+
+# play from debain 'sox' package
+play="play"
+
+script="$0"
+
+function usage()
+{
+    prog="$(basename $0)"
+
+  cat << EOF
+  Usage: $prog TIME [MESSAGE ...]
+  
+  Run xmessage "MESSAGE ..." and play warning at the time
+  time.  The TIME format is that from the 'at' command see
+  'man at'.
+
+  Examples:
+
+       $prog '10am jul 31' Pick up the mail at the postoffice
+
+       $prog 'now + 1 minutes' Do that thing
+
+       $prog 'now + 3 hours' Do that other thing
+
+       $prog 10:45am get the package from Mr. X
+
+       $prog 6:34pm Ride my unicycle
+
+
+EOF
+  exit 1
+}
+
+
+[ -z "$1" ] && usage
+
+date="$(date '+    %a   %d %b   %I:%M:%S %p')"
+
+if [ "$1" = "_BATCH__" ]
+then
+    shift
+    export DISPLAY=:0.0
+    echo -e "$@ \n\n   Current Time: $date" |\
+ xmessage -bg blue -fg white -geometry\
+ 1920x1005+0+24 -file - &
+    $play ${HOME}/horse.wav
+    exit 0
+fi
+
+
+
+time="$1"
+shift 1
+
+message="$@"
+[ -z "$message" ] && message=WARNING
+
+message="$message\n\n\n\n Alarm set Time: $date"
+
+set -x
+echo "$script _BATCH__ \"$message\"" | at "$time"
