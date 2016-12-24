@@ -6,19 +6,20 @@
 #include <inttypes.h>
 
 // house $306,000.00 * 0.9 = 275,400.00
-//
+
 // closing cost
 // 2,000 earnest money is given back
 
-
-// taxes and insurance $222 / month
+// taxes and insurance $222.00 / month
 // mortgage insurance $66.55 / month til < 80% of house cost
+
 
 // All money amounts in pennies
 static const int64_t cost_of_house = 30600000;
 
 static const int64_t start_principle = 27540000; // 10% down
 static const double rate = 0.03375/12.0;
+//static const double rate = 0.04375/12.0;
 static int64_t default_payment = 400000; // pennies
 
 // added charges // pennies
@@ -58,7 +59,7 @@ void print(int32_t month,
     //          months      years
     printf("%3.2" PRId32", %6.3lf, "
             // month_num  year
-            "%3.2d, %4d "
+            "%3.2d, %4d, "
             // pay  princ_paid
             "%8.2lf, %8.2lf, "
             // pric_forward  total_paid
