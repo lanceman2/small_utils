@@ -18,13 +18,14 @@
 static const int64_t cost_of_house = 30600000;
 
 static const int64_t start_principle = 27540000; // 10% down
-static const double rate = 0.03375/12.0;
+static const double rate = 0.03625/12.0;
 //static const double rate = 0.04375/12.0;
 static int64_t default_payment = 400000; // pennies
 
+
 // added charges // pennies
-static const int64_t mortgage_insure = 6655; // til at %80 or lower
-static const int64_t tax_insure = 22200;
+static const int64_t mortgage_insure = 10787; // per month til at %80 or lower
+static const int64_t tax_insure = 8900 + 18965; // cost every month
 
 
 static inline
