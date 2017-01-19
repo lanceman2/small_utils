@@ -17,15 +17,16 @@
 // All money amounts in pennies
 static const int64_t cost_of_house = 30600000;
 
-static const int64_t start_principle = 27540000; // 10% down
+static const int64_t start_principle = 27838705; // 10% down
 static const double rate = 0.03625/12.0;
 //static const double rate = 0.04375/12.0;
-static int64_t default_payment = 400000; // pennies
-
+//static int64_t default_payment = 600000; // pennies
+static int64_t default_payment = 429309; // pennies
+//static int64_t default_payment = 229309; // pennies
 
 // added charges // pennies
-static const int64_t mortgage_insure = 10787; // per month til at %80 or lower
-static const int64_t tax_insure = 8900 + 18965; // cost every month
+static const int64_t mortgage_insure = 7803; // per month til at %80 or lower
+static const int64_t tax_insure = 3967 + 18965; // cost every month
 
 
 static inline
@@ -39,7 +40,7 @@ int64_t charges(int64_t princple)
 {
     double d;
     d = princple * rate + tax_insure;
-    if(princple > 30600000 * 0.80)
+    if(princple > cost_of_house * 0.80)
         d += mortgage_insure;
 
     // round up pennies greater than one half
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
     printf("months, years, month, year, payment, princ_paid,"
             " principle, total_paid\n");
 
-    print(month++, 0, 0, 0, 0, principle, total);
+    print(month++, 01, 2017, 0, 0, principle, total);
     
 
     while(principle > 0) {
