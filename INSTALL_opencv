@@ -7,6 +7,10 @@
 #  https://github.com/vtcoders/mirrorworlds
 #  https://github.com/lanceman2/opencv_tutorial
 #
+# These projects may be getting this file via wget with the URL
+#
+#    https://raw.githubusercontent.com/lanceman2/small_utils/master/INSTALL_opencv
+#
 
 # This script attempts to build and install openCV (opencv.org) from the
 # github.com repo source for use in MirrorWorlds.  We assume that you know
