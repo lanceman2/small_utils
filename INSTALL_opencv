@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# This file is used by other software projects so if you make changes
+# to it be sure that your changes do not brake the dependent projects.
+# Projects that use this file are:
+#
+#  https://github.com/vtcoders/mirrorworlds
+#  https://github.com/lanceman2/opencv_tutorial
+#
+
 # This script attempts to build and install openCV (opencv.org) from the
 # github.com repo source for use in MirrorWorlds.  We assume that you know
 # some bash.  You can tell from the return status of the script if it
