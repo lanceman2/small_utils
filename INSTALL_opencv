@@ -11,6 +11,11 @@
 #
 #    https://raw.githubusercontent.com/lanceman2/small_utils/master/INSTALL_opencv
 #
+#  or like
+#
+#    https://raw.githubusercontent.com/lanceman2/small_utils/d10630bcdb3d6345617da8b1eab3b314fa0d99f2/INSTALL_opencv
+#
+# for a particular git version.
 
 # This script attempts to build and install openCV (opencv.org) from the
 # github.com repo source for use in MirrorWorlds.  We assume that you know
