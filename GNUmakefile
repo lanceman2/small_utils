@@ -37,6 +37,7 @@ built =\
  colorSelecter\
  colorSelecter3\
  fontSelecter\
+ mortgage_payment_schedule\
  $(built_image_bins)
 
 

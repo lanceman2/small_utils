@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 Usage ()
 {
@@ -30,7 +30,7 @@ suffix=".${2##*.}"
 
 FAIL()
 {
-    echo "$0 $args Failed line: ${BASH_LINENO[0]}"
+    echo "\`$0 $args\` Failed line: ${BASH_LINENO[0]}"
     [ -n "$tmp1" ] && rm -f $tmp1 $tmp2 $tmp3 $tmp4 $tmp5 $tmp6
     exit 1
 }
