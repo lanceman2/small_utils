@@ -33,7 +33,8 @@ apt-get install\
  at\
  imagemagick-doc\
  imagemagick\
- dot
+ dot\
+ curl
 ```
 
 ## Build and Install
