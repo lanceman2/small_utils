@@ -33,7 +33,7 @@ apt-get install\
  at\
  imagemagick-doc\
  imagemagick\
- dot\
+ graphviz-dev\
  curl
 ```
 
