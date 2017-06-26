@@ -27,6 +27,7 @@ bin =\
  makeWallPaper\
  sizeof\
  m3u2list\
+ PushSshKeys\
  $(built_image_bins)
 
 # These files are generated
