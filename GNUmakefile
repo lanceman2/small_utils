@@ -57,10 +57,10 @@ flip_OPERATION = "-flip"
 flop_OPERATION = "-flop"
 
 #This will replace the IMAGE_FILE with the same type of image file that is
-rotateRight_DESC = "rotated 90 degrees to the rigth"
+rotateRight_DESC = "rotated 90 degrees to the right"
 rotateLeft_DESC = "rotated 90 degrees to the left"
 flip_DESC = "fliped top to bottom"
-flip_DESC = "floped left to right"
+flop_DESC = "floped left to right"
 
 
 dirs += $(PREFIX)/bin
