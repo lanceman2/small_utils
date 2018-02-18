@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -x
+
+message="Saving Work"
+
+[ -n "$*" ] && message="$*"
+
+git commit -a -m "$message"
+git push

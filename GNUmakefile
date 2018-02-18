@@ -28,6 +28,7 @@ bin =\
  sizeof\
  m3u2list\
  PushSshKeys\
+ SaveGitWork\
  $(built_image_bins)
 
 # These files are generated
