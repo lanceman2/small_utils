@@ -34,7 +34,12 @@ apt-get install\
  imagemagick-doc\
  imagemagick\
  graphviz-dev\
- curl
+ curl\
+ pkgconf\
+ autoconf\
+ libtool\
+ automake\
+ locate
 ```
 
 ## Build and Install
