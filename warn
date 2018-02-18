@@ -31,6 +31,11 @@ function usage()
 
        $prog 6:34pm Ride my unicycle
 
+   You can check for existing at jobs, like from this script
+   by running:
+
+        atq
+
 
 EOF
   exit 1
