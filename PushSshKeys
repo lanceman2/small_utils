@@ -89,14 +89,12 @@ done
 
 function checkLocalKeys()
 {
-    set +x 
+    set -x 
     if [ ! -f "${HOME}/.ssh/id_rsa" ] ; then
         echo
         echo "generating ssh keys ..."
-        set -x
         echo -e "\n\n\n\n\n\n\n\n" |\
             ssh-keygen -t rsa -N '' || exit $?
-        set +x
     else
         echo
         echo "Your local ssh keys exist in ${HOME}/.ssh/id_rsa, which is fine."
@@ -113,7 +111,7 @@ function checkLocalKeys()
 function success()
 {
     set +x
-    echo "$prog was successful"
+    echo "$0 was successful"
     exit 0
 }
 
@@ -122,9 +120,8 @@ function checkWorksAlready()
 {
     set -x
     if ssh ${sshoptions}-o 'StrictHostKeyChecking no' -o\
- 'PreferredAuthentications=publickey' $1 'echo "It worked"'
-        set +x
-        echo -e "\nLooks like you can ssh to $1 without a password already\n" ; then
+        'PreferredAuthentications=publickey' $1\
+        echo -e "\\\\nLooks like you can ssh to $1 without password already\\\\n" ; then
         success
     fi
 }
@@ -132,14 +129,10 @@ function checkWorksAlready()
 
 function rmHostFromKnown()
 {
-    set -x
     if ! ssh-keygen -R $1 ; then
-        set +x
         echo "failed to remove host $1 from .ssh/known_hosts"
-        echo "but that may be because you do not know them yet"
+        echo "but that maybe because you do not know them yet"
         echo
-    else
-        set +x
     fi
 }
 
@@ -150,10 +143,9 @@ function pushPublicKeyToHyHost()
  'mkdir -p ${HOME}/.ssh && cat >> ${HOME}/.ssh/authorized_keys && chmod 600 ${HOME}/.ssh/authorized_keys && chmod 700 ${HOME}/.ssh'\
  || exit $?
     set +x
+
 }
 
-# disable the gnome-keyring 
-export SSH_AUTH_SOCK=0
 
 checkLocalKeys "${fromhost}"
 checkWorksAlready ${tohost}
