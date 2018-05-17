@@ -18,6 +18,8 @@ apt-get update
 apt-get install\
  build-essential\
  gcc-multilib\
+ libgnutls30\
+ csh\
  libstdc++6:i386\
  libgcc1:i386\
  zlib1g:i386\
