@@ -29,6 +29,7 @@ bin =\
  m3u2list\
  PushSshKeys\
  SaveGitWork\
+ MovePointer\
  $(built_image_bins)
 
 # These files are generated
@@ -40,6 +41,7 @@ built =\
  colorSelecter3\
  fontSelecter\
  mortgage_payment_schedule\
+ MovePointer\
  $(built_image_bins)
 
 
@@ -49,6 +51,7 @@ colorSelecter3_CFLAGS = $(shell pkg-config --cflags gtk+-3.0)
 colorSelecter3_LFLAGS = $(shell pkg-config --libs gtk+-3.0)
 fontSelecter_CFLAGS = $(shell pkg-config --cflags gtk+-3.0)
 fontSelecter_LFLAGS = $(shell pkg-config --libs gtk+-3.0)
+MovePointer_LFLAGS = -lX11
 
 
 # imagemagick's convert @OPERATION@ "${1}" ${tmpfile} 
