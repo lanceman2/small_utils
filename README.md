@@ -41,10 +41,8 @@ apt-get install\
  autoconf\
  libtool\
  automake\
- locate
-
-# for sizeof script gnutls.h
-apt-get install libgnutls28-dev
+ locate\
+ libgnutls28-dev
 ```
 
 ## Build and Install
