@@ -8,7 +8,7 @@ other things on GNU/Linux and maybe like systems.
 
 ## Dependencies
 
-On Debian GNU/Linux 8.6 (jessie)
+On Debian GNU/Linux 8.6 (jessie) and Debian 9
 
 ```
 dpkg --add-architecture i386
