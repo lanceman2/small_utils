@@ -91,6 +91,7 @@ errno.c: mk_errno_c.bash
 mkdirs:
 	mkdir -p $(dirs)
 	mkdir -p $(HOME)/.vim/vim_backup
+	mkdir -p $(HOME)/.vim/swapfiles
 
 
 install: $(built) mkdirs 
