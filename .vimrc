@@ -6,6 +6,8 @@ set wildmode=longest:full
 set wildmenu
 set expandtab
 
+set directory=$HOME/.vim/swapfiles//
+
 set nocompatible	" Use Vim defaults (much better!)
 set bs=indent,eol,start	" allow backspacing over everything in insert mode
 set ai			" always set autoindenting on
