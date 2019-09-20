@@ -2,7 +2,7 @@
 
 -include config.make
 
-VERSION = 0.1
+VERSION = 0.2
 PREFIX ?= /usr/local/encap/small_utils-$(VERSION)
 
 # prefix prepended to all installed files in bin
@@ -98,7 +98,6 @@ install: $(built) mkdirs
 	for b in $(bin) ; do\
 	  cp $$b $(PREFIX)/bin/$(PRE)$$b ;\
 	  done
-	cp .vimrc $(HOME)/.vimrc
 
 
 configure:
