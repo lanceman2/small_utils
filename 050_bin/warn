@@ -54,7 +54,10 @@ then
     echo -e "$@ \n\n   Current Time: $date" |\
  xmessage -bg blue -fg white -geometry\
  1920x1005+0+24 -file - &
-    $play ${HOME}/horse.wav
+
+    # find a sound file to play
+    horse=/usr/lib/libreoffice/share/gallery/sounds/horse.wav
+    $play $horse
     exit 0
 fi
 
