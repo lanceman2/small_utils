@@ -107,6 +107,7 @@ cat >> $cfile << EOF
 #include <time.h>
 #include <sys/time.h>
 #include <setjmp.h>
+#include <stdbool.h>
 #include <gnutls/gnutls.h>
 EOF
 
