@@ -8,7 +8,7 @@ other things on GNU/Linux systems.
 
 ## Dependencies
 
-just looks in 020_root_installs/ first.
+Just look in 020_root_installs/ first.
 
 ## Ports
 
