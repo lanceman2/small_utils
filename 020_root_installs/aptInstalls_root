@@ -39,4 +39,5 @@ apt install -y\
  automake\
  locate\
  libgnutls28-dev\
- youtube-dl
+ youtube-dl\
+ glibc-doc
