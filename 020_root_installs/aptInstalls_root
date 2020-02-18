@@ -38,4 +38,6 @@ apt install -y\
  libtool\
  automake\
  locate\
- libgnutls28-dev
+ libgnutls28-dev\
+ youtube-dl\
+ glibc-doc
