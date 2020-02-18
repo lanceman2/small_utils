@@ -2,15 +2,12 @@
 
 # This script installs librtlsdr from a tagged github.com repository.
 
+tag=0.6.0
+tarname=librtlsdr-$tag
 
 set -exo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"
-
-
-tag=0.6.0
-
-tarname=librtlsdr-$tag
 
 try=0
 tarnameTry=$tarname-try-$try
