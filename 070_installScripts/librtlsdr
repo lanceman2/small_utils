@@ -55,7 +55,7 @@ cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
 autoreconf -i
-./configure --prefix=$prefix --enable-driver-detach
+CFLAGS=-g ./configure --prefix=$prefix --enable-driver-detach
 make $make_opts
 make install
 
