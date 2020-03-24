@@ -43,6 +43,7 @@ built =\
  MovePointer\
  $(built_image_bins)
 
+CFLAGS := -g -Wall -Wno-deprecated
 
 colorSelecter_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
 colorSelecter_LFLAGS = $(shell pkg-config --libs gtk+-2.0)
@@ -80,7 +81,7 @@ $(built_image_bins): image_ GNUmakefile
 
 
 %: %.c
-	$(CC) -Wall -Werror -g $($@_CFLAGS) $^ -o $@ $($@_LFLAGS)
+	$(CC) $(CFLAGS) -Wall -g $($@_CFLAGS) $^ -o $@ $($@_LFLAGS)
 
 errno.c: mk_errno_c.bash
 	./mk_errno_c.bash > $@
