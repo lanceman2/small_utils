@@ -109,6 +109,7 @@ cat >> $cfile << EOF
 #include <setjmp.h>
 #include <stdbool.h>
 #include <elf.h>
+#include <complex.h>
 #include <regex.h>
 #include <gnutls/gnutls.h>
 EOF
