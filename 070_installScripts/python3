@@ -2,7 +2,11 @@
 
 # This script installs librtlsdr from a tagged github.com repository.
 
-tag=3.8.3
+# Find a python release that works:
+#tag=3.8.3
+#tag=3.8.1
+tag=3.7.6
+
 tarname=Python-$tag
 
 set -exo pipefail
@@ -33,6 +37,11 @@ case "$tag" in
 f5c7dee380f9c5a99ad35a401fcba5a9117c3860ecec5c\
 b47a92712c6549442fd2fa553a15c5657241dd09f5d00b\
 9ed4f0f4
+    3.7.6)
+        sha512sum=5be022c384728b0c6709d165486f6\
+6226d126c521b466ed24d0c4c3c5910ec786a734f4c2c91\
+6ac409213c54a492b9fb230fb721c41e3de281676a7e9d8\
+f3171
         ;;
 esac
 
