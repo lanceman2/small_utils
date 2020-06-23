@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# This script installs librtlsdr from a tagged github.com repository.
+
+tag=3.8.3
+tarname=Python-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+#https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tar.xz
+url=https://www.python.org/ftp/python/$tag/$tarname.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    3.8.3)
+        sha512sum=3103bd8d944f3905eee3a2b52fd1\
+f5c7dee380f9c5a99ad35a401fcba5a9117c3860ecec5c\
+b47a92712c6549442fd2fa553a15c5657241dd09f5d00b\
+9ed4f0f4
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+
+CFLAGS="-g -Wall" ./configure --prefix=$prefix --enable-shared
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
