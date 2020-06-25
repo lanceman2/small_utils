@@ -1,0 +1,98 @@
+#!/bin/bash
+
+
+# sudo apt install log4cpp
+
+tag=v3.8.1.0
+
+tarname=gnuradio-$tag
+
+volktarfile=volk-v2.3.0.tar.gz
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+topdir=$PWD
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/gnuradio/gnuradio/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v3.8.1.0)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+
+tar --strip-components=1 -xzf ../$tarfile
+
+
+mkdir -p volk
+cd volk
+tar --strip-components=1 -xzf $topdir/$volktarfile
+cd -
+
+mkdir BUILD
+cd BUILD
+
+
+cmake .. -G"Unix Makefiles"\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"\
+ -DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python2.7/dist-packages/gnuradio/gr:${prefix}/lib/python2.7/dist-packages/gnuradio/uhd"\
+ -DENABLE_PYTHON=true\
+ -DENABLE_GR_FFT=true\
+ -DENABLE_GRC=true\
+ -DENABLE_GR_UTILS=true\
+ -DENABLE_GR_WXGUI=true\
+ -DENABLE_GR_QTGUI=true\
+ -DENABLE_GR_UTILS=true\
+ -DENABLE_GR_UHD=true\
+ -DENABLE_GR_WXGUI=true\
+ -DENABLE_GR_ZEROMQ=true\
+ -DENABLE_DEFAULT=true\
+ -DENABLE_DOXYGEN:BOOL=true\
+ -DENABLE_GR_CTRLPORT=true\
+ -DENABLE_PERFORMANCE_COUNTERS=true\
+ -DENABLE_INTERNAL_VOLK=ON
+
+make VERBOSE=1 -j6
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF

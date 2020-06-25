@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+tag=1.1.3
+
+tarname=log4cpp-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+# sourceforge sucks and there is no url for download
+#url=http://log4cpp.sf.net/
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    1.1.3)
+        sha512sum=88e5e10bce8d7d6421c3dcf14aa2538\
+5159c4ae52becdc1f3666ab86e1ad3f633786d82afe398c51\
+7d4faaa57b3e7b7c0b524361d81c6b9040dbded5cecc19de
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=2 -xzf ../$tarfile
+
+
+./configure --prefix=$prefix
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

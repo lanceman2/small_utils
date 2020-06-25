@@ -1,0 +1,89 @@
+#!/bin/bash
+
+
+# apt install cmake libboost-all-dev python-mako python3 libncurses-dev\
+libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev python-mako\
+python-docutils python-setuptools python3-setuptools python3
+
+
+tag=v3.15.0.0
+
+tarname=uhd-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/EttusResearch/uhd/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    3.15.0.0)
+        sha512sum=cf83e1357eefb8bdf1542850d66d8\
+007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85\
+f2b0ff8318d2877eec2f63b931bd47417a81a538327af927\
+da3e
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+
+tar --strip-components=1 -xzf ../$tarfile
+
+cd host
+mkdir BUILD
+cd BUILD
+
+cmake .. -G"Unix Makefiles"\
+ -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
+ -DUHD_IMAGES_DIR:BOOL=TRUE\
+ -DENABLE_USB=TRUE\
+ -DENABLE_B200=TRUE\
+ -DENABLE_E300=TRUE\
+ -DENABLE_USRP2=TRUE\
+ -DENABLE_RFNOC=TRUE\
+ -DENABLE_X300=TRUE\
+ -DLIBUSB_INCLUDE_DIRS=/usr/include/libusb-1.0
+
+make VERBOSE=1 -j6
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
