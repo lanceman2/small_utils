@@ -75,9 +75,16 @@ cmake .. -G"Unix Makefiles"\
  -DENABLE_USRP2=TRUE\
  -DENABLE_RFNOC=TRUE\
  -DENABLE_X300=TRUE\
- -DLIBUSB_INCLUDE_DIRS=/usr/include/libusb-1.0
+ -DLIBUSB_INCLUDE_DIRS=/usr/include/libusb-1.0\
+ -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3\
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
 
-make VERBOSE=1 -j6
+
+# -DRUNTIME_PYTHONPATH:FILEPATH=/usr/bin/python3:/usr/local/lib/python3/dist-packages/gnuradio/gr:/usr/local/lib/python3/dist-packages/gnuradio/uhd
+
+
+
+make VERBOSE=1 -j10
 make install
 
 set +x

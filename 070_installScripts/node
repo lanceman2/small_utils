@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+tag=v12.18.1
+
+tarname=node-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/nodejs/node/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v12.18.1)
+        sha512sum=508bcc7c7bfb4d4ac9\
+42830153a85caf3b34f35f32b8c6dde2f2c\
+0b1bfbcd1c5cf5cc4bdc5f8514c19fe0c22\
+01d7a46bf56a6733275590b02aef916a382\
+f10f4
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+./configure --prefix=$prefix
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
