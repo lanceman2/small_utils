@@ -2,9 +2,9 @@
 
 
 # Find a python release that works:
-#tag=3.8.3
+tag=3.8.3
 #tag=3.8.1
-tag=3.7.6
+#tag=3.7.6
 
 tarname=Python-$tag
 
@@ -76,4 +76,3 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
-
