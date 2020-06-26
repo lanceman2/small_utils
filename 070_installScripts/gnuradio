@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# sudo apt install log4cpp
+# sudo apt install log4cpp: FAILs installed log4cpp from source.
 
 tag=v3.8.1.0
 

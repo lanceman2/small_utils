@@ -49,6 +49,12 @@ else
     set -x
 fi
 
+
+set +x
+echo "Got $tarfile  If you need to install it, edit this script"
+exit
+
+
 mkdir "$builddir"
 cd "$builddir"
 
