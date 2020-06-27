@@ -1,7 +1,11 @@
 #!/bin/bash
 
 
+# apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev
+
 # sudo apt install log4cpp: FAILs installed log4cpp from source.
+
+# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi pycairo 
 
 tag=v3.8.1.0
 
@@ -67,12 +71,14 @@ cd BUILD
 
 
 cmake .. -G"Unix Makefiles"\
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"\
  -DENABLE_PYTHON=true\
- -DENABLE_GR_FFT=true\
  -DENABLE_GRC=true\
+ -DENABLE_GR_FFT=true\
  -DENABLE_GR_UTILS=true\
+ -DENABLE_GRC=true\
  -DENABLE_GR_WXGUI=true\
  -DENABLE_GR_QTGUI=true\
  -DENABLE_GR_UTILS=true\
@@ -85,9 +91,10 @@ cmake .. -G"Unix Makefiles"\
  -DENABLE_PERFORMANCE_COUNTERS=true\
  -DENABLE_INTERNAL_VOLK=ON
 
- #-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3\
  #-DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
+
+exit
 
 make VERBOSE=1 -j10
 make install

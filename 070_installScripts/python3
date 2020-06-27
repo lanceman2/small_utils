@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# With all the apt dependencies this all build a broken python
+# installation.  Maybe all this is not needed but I think that
+# libssl-dev is a must.  Without libssl-dev pip3 cannot download
+# and install python packages.
+#
+# apt install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+
 
 # Find a python release that works:
 tag=3.8.3
