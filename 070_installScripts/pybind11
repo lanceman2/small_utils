@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+tag=v2.5.0
+
+tarname=pybind11-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/pybind/pybind11/tarball/$tag
+
+#This script uses the current installed python3 prefix ...
+#prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v2.5.0)
+        sha512sum=39e46cfa8e8732f3c9c145a26b04ae01\
+96f23a18b91c60551e0393848155e0f2ff01e58c6b47175542\
+fa581b74f853a9073f4f20af0c6532fdca1bcda3df5b7b
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+# this will put files in python3_PREFIX/lib/pythonVERSION/site-packages
+#
+python3 setup.py install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname
+
+EOF
