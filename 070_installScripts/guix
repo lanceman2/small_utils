@@ -1,0 +1,73 @@
+#!/bin/bash
+
+
+
+# apt install guile-3.0 texinfo libgnutls28-dev guile-sqlite3 guile-gcrypt guile-json guile-gnutls guile-git guile-json
+
+
+tag=1.1.0
+
+tarname=guix-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://ftp.gnu.org/gnu/guix/guix-$tag.tar.gz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    1.1.0)
+        sha512sum=9f675d1cb15c9ed9003b8e2a995bd5\
+9ea1abfd50642cef234baa23c9b035d1cbe2c23d7ed6e1db\
+44713729b3f47917260f62fe95c1009e54d7b32b7085d734\
+a7
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+./configure --prefix=$prefix --disable-daemon
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

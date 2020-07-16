@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# apt install libunistring-dev
+
+tag=3.6.9
+
+tarname=gnutls-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.6/gnutls-$tag.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    3.6.9)
+        sha512sum=a9fd0f4edae4c081d5c539ba2e5\
+574a4d7294bc00c5c73ea25ce26cb7fd126299c2842a2\
+82d45ef5cf0544108f27066e587df28776bc7915143d1\
+90d7d5b9d07
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+
+./configure --prefix=$prefix --enable-guile --enable-manpages
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
