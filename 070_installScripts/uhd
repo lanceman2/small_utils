@@ -1,9 +1,15 @@
 #!/bin/bash
 
 
-# apt install cmake libboost-all-dev python-mako python3 libncurses-dev\
-libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev python-mako\
-python-docutils python-setuptools python3-setuptools python3
+# apt install cmake libboost-all-dev libncurses-dev\
+ libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev
+
+ # We tried to install these from source.
+ #python3 python-mako\
+ python-docutils python-setuptools
+# so ya:
+# pip3 install mako docutils setuptools numpy
+
 
 
 tag=v3.15.0.0
@@ -42,7 +48,7 @@ esac
 
 
 if [ ! -e "$tarfile" ] ; then
-    wget $url -O $tarfile
+    wget --no-check-certificate $url -O $tarfile
 fi
 
 
@@ -76,8 +82,8 @@ cmake .. -G"Unix Makefiles"\
  -DENABLE_RFNOC=TRUE\
  -DENABLE_X300=TRUE\
  -DLIBUSB_INCLUDE_DIRS=/usr/include/libusb-1.0\
- -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3\
- -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
+ -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3
 
 
 # -DRUNTIME_PYTHONPATH:FILEPATH=/usr/bin/python3:/usr/local/lib/python3/dist-packages/gnuradio/gr:/usr/local/lib/python3/dist-packages/gnuradio/uhd
