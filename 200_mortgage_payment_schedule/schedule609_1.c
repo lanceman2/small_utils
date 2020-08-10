@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     int64_t principle = start_principle; // balance left
     int64_t total = 0;   // pennies total paid
     // Initialize date
-    static int month_num = 9; // 1 - 12
+    static int month_num = 8; // 1 - 12
     static int year = 2020; // 2017 to 2040 or whatever
 
     printf("months, years, month, year, payment, princ_paid,"
