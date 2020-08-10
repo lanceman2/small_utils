@@ -5,7 +5,7 @@
 
 ############################ DEPENDENCIES #########################################
 
-# apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev libgirepository1.0-dev libzmq3-dev libsphinxbase-dev sphinxbase-utils sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev
+# apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev libgirepository1.0-dev libzmq3-dev libsphinxbase-dev sphinxbase-utils sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev libyaml-dev
 
 # sudo apt install log4cpp: FAILs installed log4cpp from source.
 
