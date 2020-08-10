@@ -1,11 +1,15 @@
 #!/bin/bash
 
+#To get a list of what broken:
+# cd BUILD && cmake .. -LAH > xxx
 
-# apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev
+############################ DEPENDENCIES #########################################
+
+# apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev libgirepository1.0-dev libzmq3-dev libsphinxbase-dev sphinxbase-utils sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev
 
 # sudo apt install log4cpp: FAILs installed log4cpp from source.
 
-# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi pycairo 
+# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi pycairo pygobject pyqt5 click click-plugins
 
 tag=v3.8.1.0
 
@@ -43,7 +47,7 @@ esac
 
 
 if [ ! -e "$tarfile" ] ; then
-    wget $url -O $tarfile
+    wget --no-check-certificate $url -O $tarfile
 fi
 
 
@@ -74,27 +78,27 @@ cmake .. -G"Unix Makefiles"\
  -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"\
- -DENABLE_PYTHON=true\
- -DENABLE_GRC=true\
- -DENABLE_GR_FFT=true\
- -DENABLE_GR_UTILS=true\
- -DENABLE_GRC=true\
- -DENABLE_GR_WXGUI=true\
- -DENABLE_GR_QTGUI=true\
- -DENABLE_GR_UTILS=true\
- -DENABLE_GR_UHD=true\
- -DENABLE_GR_WXGUI=true\
- -DENABLE_GR_ZEROMQ=true\
- -DENABLE_DEFAULT=true\
- -DENABLE_DOXYGEN:BOOL=true\
- -DENABLE_GR_CTRLPORT=true\
- -DENABLE_PERFORMANCE_COUNTERS=true\
- -DENABLE_INTERNAL_VOLK=ON
+ -DENABLE_PYTHON=ON\
+ -DENABLE_GRC=ON\
+ -DENABLE_GR_FFT=ON\
+ -DENABLE_GR_UTILS=ON\
+ -DENABLE_GR_QTGUI=ON\
+ -DENABLE_GR_UTILS=ON\
+ -DENABLE_GR_UHD=ON\
+ -DENABLE_GR_ZEROMQ=ON\
+ -DENABLE_DEFAULT=ON\
+ -DENABLE_DOXYGEN=ON\
+ -DENABLE_GR_CTRLPORT=ON\
+ -DENABLE_PERFORMANCE_COUNTERS=ON\
+ -DENABLE_INTERNAL_VOLK=ON\
+ -DENABLE_SPHINX=ON\
+ -DENABLE_GR_VIDEO_SDL=ON\
+ -DENABLE_GR_WAVELET=ON\
+ -DENABLE_GR_MODTOOL=ON
 
  #-DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
-exit
 
 make VERBOSE=1 -j10
 make install
