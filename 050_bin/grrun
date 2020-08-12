@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+PYTHONPATH=/usr/local/encap/gnuradio-v3.8.1.0-try-2/lib/python3.8/site-packages
+
+if [ -n "$_MAGIC_ZZ_PYPATH_" ] ; then
+    return
+fi
+
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+
+    cat << EOF
+    
+      Usage: $0 PROGRAM [ARGS]
+
+    So GNUradio can find its' python modules:
+    Run PROGRAM with PYTHONPATH set to:
+    
+    $PYTHONPATH
+
+EOF
+
+    exit 1
+
+fi
+
+set -x
+
+export PYTHONPATH="$PYTHONPATH"
+
+exec $*

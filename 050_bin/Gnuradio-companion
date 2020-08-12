@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+_MAGIC_ZZ_PYPATH_=yes
+source "$(dirname ${BASH_SOURCE[0]})/grrun"
+
+set -x
+
+export PYTHONPATH="$PYTHONPATH"
+exec gnuradio-companion

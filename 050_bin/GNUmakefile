@@ -30,6 +30,8 @@ bin =\
  PushSshKeys\
  SaveGitWork\
  MovePointer\
+ Gnuradio-companion\
+ grrun\
  $(built_image_bins)
 
 # These files are generated
