@@ -1,6 +1,11 @@
 #!/bin/bash
 
 
+if [ ! -e /usr/local/lib/libssl.so ] ; then
+    echo "Install openssl first"
+    exit 1
+fi
+
 # Find a python release that works:
 tag=3.8.3
 #tag=3.8.1
@@ -74,7 +79,7 @@ CFLAGS="-g -Wall"\
  ./configure\
  --prefix=$prefix\
  --enable-shared\
- --with-ssl=/usr/lib/x86_64-linux-gnu
+ --with-ssl=/usr/local/lib
 make -j5
 make install
 
