@@ -2,16 +2,19 @@
 
 pre=/usr/local/encap/gnuradio-v3.8.1.0-try-2
 
-set -x
-export PYTHONPATH="${pre}/lib/python3.8/site-packages:${PYTHONPATH}"
-export LD_LIBRARY_PATH="${pre}/lib:${LD_LIBRARY_PATH}"
-set +x
-
-if [ -n "$_JUST_PATHS_" ] ; then
-    return
+if ! echo "$PYTHONPATH" | grep -q "$pre" ; then
+    set -x
+    export PYTHONPATH="${pre}/lib/python3.8/site-packages:${PYTHONPATH}"
+    set +x
 fi
 
-if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+if ! echo "$LD_LIBRARY_PATH" | grep -q "$pre" ; then
+    set -x
+    export LD_LIBRARY_PATH="${pre}/lib:${LD_LIBRARY_PATH}"
+    set +x
+fi
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
 
     cat << EOF
 
@@ -29,9 +32,11 @@ if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
 EOF
 
     exit 1
-
 fi
 
-set -x
 
-exec $*
+if [ -n "$*" ] ; then
+    set -x
+    exec $*
+    exit
+fi
