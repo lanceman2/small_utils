@@ -70,7 +70,7 @@ cd "$builddir"
 tar --strip-components=1 -xJf ../$tarfile
 
 
-# The --with-ssl=/usr/lib/x86_64-linux-gnu seems to fix the pip install
+# The --with-ssl=/usr/local/lib seems to fix the pip install
 # errors that have:
 #
 #  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError('No cipher can be selected.'))': /simple/pip/
