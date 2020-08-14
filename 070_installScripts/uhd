@@ -89,7 +89,6 @@ cmake .. -G"Unix Makefiles"\
 # -DRUNTIME_PYTHONPATH:FILEPATH=/usr/bin/python3:/usr/local/lib/python3/dist-packages/gnuradio/gr:/usr/local/lib/python3/dist-packages/gnuradio/uhd
 
 
-
 make VERBOSE=1 -j10
 make install
 
