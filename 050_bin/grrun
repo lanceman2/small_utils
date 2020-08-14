@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pre=/usr/local/encap/gnuradio-v3.8.1.0-try-2
+pre=/usr/local
 
 if ! echo "$PYTHONPATH" | grep -q "$pre" ; then
     set -x
