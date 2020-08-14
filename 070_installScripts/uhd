@@ -2,11 +2,10 @@
 
 
 # apt install cmake libboost-all-dev libncurses-dev\
- libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev
+ libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev libusb-1.0-0-dev
 
- # We tried to install these from source.
- #python3 python-mako\
- python-docutils python-setuptools
+# We tried to install these from source.
+#python3 python-mako python-docutils python-setuptools
 # so ya:
 # pip3 install mako docutils setuptools numpy
 
