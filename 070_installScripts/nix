@@ -29,18 +29,18 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 url=https://nixos.org/releases/nix/$tarname/$tarname.tar.xz
+#url=https://github.com/NixOS/nix/tarball/$tag
+
 prefix=/usr/local/encap/$tarnameTry
 
 tarfile=$tarname.tar.xz
+#tarfile=$tarname.tar.gz
 
 sha512sum=
 
 case "$tag" in
     2.3.7)
-        sha512sum=115b323b72d08d8cb4cf284e3\
-3383ab3543bf743906acb1191701e81ab2f577670f7\
-c5e5a707aa1110dc9d152dff80a762dd56e2edf4c92a\
-2272af26d86bacff
+        sha512sum=
         ;;
 esac
 
@@ -61,11 +61,15 @@ fi
 mkdir "$builddir"
 cd "$builddir"
 tar --strip-components=1 -xJf ../$tarfile
+#tar --strip-components=1 -xzf ../$tarfile
 
-export EDITLINE_CFLAGS=
-export EDITLINE_LIBS="-leditline"
 
-./configure --prefix=$prefix
+#set +e
+#autoreconf -vi
+#set -e
+#autoreconf -vi
+
+./configure --prefix=$prefix --enable-gc
 make -j5
 make install
 
