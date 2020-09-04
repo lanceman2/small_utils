@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Notes on Dependencies:
+
+# package libeditline-dev was too old
+# So we installed it from source using script editline
+#
+# In addition we APT installed:
+#
+# apt install curl libssl-dev libbrotli-dev \
+libbz2-dev liblzma-dev libcurl4-openssl-dev \
+libsqlite3-dev libboost-all-dev \
+xml-core bison flex libseccomp-dev
+
+
+tag=2.3.7
+
+tarname=nix-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+url=https://nixos.org/releases/nix/$tarname/$tarname.tar.xz
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    2.3.7)
+        sha512sum=115b323b72d08d8cb4cf284e3\
+3383ab3543bf743906acb1191701e81ab2f577670f7\
+c5e5a707aa1110dc9d152dff80a762dd56e2edf4c92a\
+2272af26d86bacff
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+export EDITLINE_CFLAGS=
+export EDITLINE_LIBS="-leditline"
+
+./configure --prefix=$prefix
+make -j5
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
