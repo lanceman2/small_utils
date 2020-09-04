@@ -10,7 +10,7 @@
 # apt install curl libssl-dev libbrotli-dev \
 libbz2-dev liblzma-dev libcurl4-openssl-dev \
 libsqlite3-dev libboost-all-dev \
-xml-core bison flex libseccomp-dev
+xml-core bison flex libseccomp-dev libgc-dev
 
 
 tag=2.3.7
@@ -68,8 +68,6 @@ export EDITLINE_LIBS="-leditline"
 ./configure --prefix=$prefix
 make -j5
 make install
-
-cd -
 
 set +x
 
