@@ -5,21 +5,29 @@
 
 ############################ DEPENDENCIES #########################################
 
-# We need to install python3 first
+# We need to install python3 and uhd from scripts in this directory
 
 # apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev\
  libgirepository1.0-dev libzmq3-dev libsphinxbase-dev sphinxbase-utils\
- sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev libyaml-dev doxygen
+ sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev\
+ libyaml-dev doxygen cmake swig libfftw3-dev\
+ qtdeclarative5-dev qml-module-qtquick-controls\
+ portaudio19-dev libqwt-qt5-dev
 
 # sudo apt install log4cpp: FAILs installed log4cpp from source.
 
-# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi pycairo pygobject pyqt5 click click-plugins
+# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
+ pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools
 
 tag=v3.8.1.0
 
 tarname=gnuradio-$tag
 
+volksha512sum=
 volktarfile=volk-v2.3.0.tar.gz
+volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
+
 
 set -exo pipefail
 
@@ -48,6 +56,20 @@ case "$tag" in
         sha512sum=
         ;;
 esac
+
+
+if [ ! -e $volktarfile ] ; then
+    wget --no-check-certificate $volkurl -O $volktarfile
+fi
+
+if [ -n "$volksha512sum" ] ; then
+    echo "$volksha512sum  $volktarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $volktarfile
+    set -x
+fi
+
 
 
 if [ ! -e "$tarfile" ] ; then
@@ -103,6 +125,7 @@ cmake .. -G"Unix Makefiles"\
  #-DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
+exit
 
 make VERBOSE=1 -j10
 make install
