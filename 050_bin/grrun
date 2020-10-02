@@ -2,17 +2,33 @@
 
 pre=/usr/local
 
-if ! echo "$PYTHONPATH" | grep -q "$pre" ; then
-    set -x
-    export PYTHONPATH="${pre}/lib/python3.8/site-packages:${PYTHONPATH}"
-    set +x
-fi
 
-if ! echo "$LD_LIBRARY_PATH" | grep -q "$pre" ; then
-    set -x
-    export LD_LIBRARY_PATH="${pre}/lib:${LD_LIBRARY_PATH}"
-    set +x
-fi
+function CheckEnv() {
+
+    local one=$1
+    local oldval="${!one}"
+
+    [ -n "$2" ] || exit 1
+
+    if ! echo "${oldval}" | grep -q "$2" ; then
+        if [ -n "${oldval}" ] ; then
+            set -x
+            export $1="${2}:${oldval}"
+            set +x
+        else
+            set -x
+            export $1="${2}"
+            set +x
+        fi
+    fi
+}
+
+
+CheckEnv PYTHONPATH "${pre}/lib/python3.8/site-packages"
+CheckEnv LD_LIBRARY_PATH "${pre}/lib"
+CheckEnv GRC_BLOCKS_PATH "${pre}/share/gnuradio/grc/blocks"
+
+
 
 
 [ -n "$_JUST_PATHS_" ] && return
