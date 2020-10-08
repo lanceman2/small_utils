@@ -45,9 +45,13 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
 
     $PYTHONPATH
 
-    and LD_LIBRARY_PATH set to:
+    LD_LIBRARY_PATH set to:
 
     $LD_LIBRARY_PATH
+
+    and GRC_BLOCKS_PATH set to:
+
+    $GRC_BLOCKS_PATH
 
 EOF
 
