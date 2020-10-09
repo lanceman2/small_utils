@@ -32,6 +32,7 @@ bin =\
  MovePointer\
  Gnuradio-companion\
  grrun\
+ LinesOfCCode\
  $(built_image_bins)
 
 # These files are generated

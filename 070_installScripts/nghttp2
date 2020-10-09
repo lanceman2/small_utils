@@ -3,7 +3,7 @@
 
 tag=v1.41.0
 
-tarname=node-$tag
+tarname=nghttp2-$tag
 
 set -exo pipefail
 
@@ -33,7 +33,7 @@ esac
 
 
 if [ ! -e "$tarfile" ] ; then
-    wget $url -O $tarfile
+    wget --no-check-certificate $url -O $tarfile
 fi
 
 

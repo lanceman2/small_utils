@@ -1,0 +1,69 @@
+#!/bin/bash
+
+function print_help() {
+
+   cat << EOF
+
+  Usage: $(basename $0) [-w]|[-h|--help]
+
+    Print the number of lines of C and C++ code in the current directory,
+    both counting comments (-w) and excluding comments (default).
+
+    This requires that Jonathan Leffler's program scc be in your PATH as
+    jleffler_scc.  URL https://github.com/jleffler/scc-snapshots/
+
+
+   --------------------------- OPTIONS ------------------------------------
+
+        -h|--help  print this help and exit 1.
+
+        -w         with comments and blank lines.  Otherwise it prints the
+                   number of lines of C code excluding comments and blank
+                   lines.
+
+EOF
+
+    exit 1
+
+
+}
+
+
+
+if ! which jleffler_scc > /dev/null ; then
+
+    echo -e "Error: jleffler_scc is not in your PATH\n"
+
+    print_help
+fi
+
+
+if [ -n "$1" ] || [ "$1" != "-w" ] ; then
+    print_help
+fi
+
+
+
+set -eo pipefail
+
+
+echo -e "\nTotal lines of C/C++ code *.c *.cpp and *.h *.hpp files in $PWD/"
+
+function spewCode() {
+
+    for i in $(find . -regextype egrep -regex ".*/.*\.[c|h](pp|)$") ; do
+        cat $i
+    done
+}
+
+
+if [ -z "$1" ] ; then
+    echo -e "without comments or blank lines.\n"
+    spewCode |\
+        jleffler_scc |\
+        sed -e 's/^\s*\/\/.*//g' -e '/^\s*$/d' |\
+        wc -l
+else
+    echo -e "with comments and blank lines.\n"
+    spewCode | wc -l
+fi

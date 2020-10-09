@@ -1,13 +1,24 @@
 #!/bin/bash
 
+tag=6.80
 
-tag=v14.13.1
-
-tarname=node-$tag
+tarname=scc-$tag
 
 set -exo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"
+
+sha512sum=
+
+case ${tag} in
+
+    6.80)
+        sha512sum=648d0a0a95fd41b29a9fa268e9ed0\
+e63a421519c6a015824404a1af5b2658ba33282548fc684\
+f09b83c5f485fa380981754876408f1e3171aaa20f7e73645026
+        ;;
+esac
+
 
 try=0
 tarnameTry=$tarname-try-$try
@@ -17,26 +28,12 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-url=https://github.com/nodejs/node/tarball/$tag
+url="https://github.com/jleffler/scc-snapshots/tarball/release/$tag"
+
 
 prefix=/usr/local/encap/$tarnameTry
 
 tarfile=$tarname.tar.gz
-
-sha512sum=
-
-case "$tag" in
-    v12.18.1)
-        sha512sum=508bcc7c7bfb4d4ac9\
-42830153a85caf3b34f35f32b8c6dde2f2c\
-0b1bfbcd1c5cf5cc4bdc5f8514c19fe0c22\
-01d7a46bf56a6733275590b02aef916a382\
-f10f4
-        ;;
-    v14.13.1)
-        sha512sum=
-        ;;
-esac
 
 
 if [ ! -e "$tarfile" ] ; then
@@ -57,9 +54,12 @@ cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
 
-./configure --prefix=$prefix
-make -j8
-make install
+make
+
+mkdir -p $prefix/bin
+
+cp scc $prefix/bin/jleffler_scc
+
 
 cd -
 
@@ -67,7 +67,6 @@ set +x
 
 cat << EOF
 
-   SUCCESSFULLY installed $tarname in $prefix
+   SUCCESSFULLY installed $tarname in $prefix/bin/jleffler_scc
 
 EOF
-
