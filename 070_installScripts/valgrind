@@ -54,7 +54,7 @@ cd "$builddir"
 tar --strip-components=1 -xjf ../$tarfile
 
 
-./configure --prefix=$prefix
+./configure --prefix=$prefix --with-mpicc=none
 make -j5
 make install
 
