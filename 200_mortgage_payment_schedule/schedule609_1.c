@@ -7,8 +7,9 @@
 
 // All numbers in pennies.
 
-static const int64_t start_principle = 15754792; // pennies
- 
+//static const int64_t start_principle = 15754792; // pennies
+static const int64_t start_principle = 10963398; // pennies
+
 static const double rate = 0.03625/12.0; // /12 ==> monthly
 static int64_t default_payment = 750000; // pennies
 
@@ -60,10 +61,17 @@ void print(int32_t month,
  
 }
 
-/*
 
+static inline void
+IncreaseMonth(int32_t *month, int *month_num,  int *year) {
 
-   */
+    ++(*month);
+    ++(*month_num);
+    if(*month_num > 12) {
+        *month_num = 1;
+        ++(*year);
+    }
+}
 
 
 int main(int argc, char **argv)
@@ -83,14 +91,15 @@ int main(int argc, char **argv)
     int64_t principle = start_principle; // balance left
     int64_t total = 0;   // pennies total paid
     // Initialize date
-    static int month_num = 8; // 1 - 12
+    static int month_num = 12; // 1 - 12
     static int year = 2020; // 2017 to 2040 or whatever
 
     printf("months, years, month, year, payment, princ_paid,"
             " principle, total_paid\n");
 
-    print(month++, month_num++, year, 0, 0, principle, total);
-    
+    print(month, month_num, year, 0, 0, principle, total);
+    IncreaseMonth(&month, &month_num, &year);
+
 
     while(principle > 0) {
 
@@ -110,17 +119,10 @@ int main(int argc, char **argv)
 
         total += payment;
 
-        print(month++, month_num, year,
-                payment, payoff, principle - payoff, total);
+        print(month, month_num, year, payment, payoff, principle - payoff, total);
         principle -= payoff;
 
-        // next month and year
-        month_num++;
-        if(month_num > 12) {
-            month_num = 1;
-            year++;
-        }
-
+        IncreaseMonth(&month, &month_num, &year);
     }
 
     return 0;
