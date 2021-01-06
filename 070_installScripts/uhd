@@ -4,14 +4,14 @@
 # apt install cmake libboost-all-dev libncurses-dev\
  libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev libusb-1.0-0-dev
 
-# We tried to install these from source.
+# We tried to install these from apt
 #python3 python-mako python-docutils python-setuptools
 # so ya:
 # pip3 install mako docutils setuptools numpy
 
 
 
-tag=v3.15.0.0
+tag=v4.0.0.0
 
 tarname=uhd-$tag
 
@@ -36,7 +36,14 @@ tarfile=$tarname.tar.gz
 
 sha512sum=
 
+
 case "$tag" in
+    v4.0.0.0)
+        sha512sum=e931431a9d8bac446191dc40c76b\
+834b49abb443a407fce981e095e1948ca7174608a13a98\
+eab833ceee00008bcd9fa15056f2706fcd046feb67ab33\
+8ca85baf
+        ;;
     3.15.0.0)
         sha512sum=cf83e1357eefb8bdf1542850d66d8\
 007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85\
