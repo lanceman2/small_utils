@@ -27,7 +27,10 @@ sha512sum=
 
 case "$tag" in
     OpenSSL_1_1_1g)
-        sha512sum=
+        sha512sum=f98d5d481d3eaacf5d4ab54c\
+116199b7785dc79552f385d1b8a796d819b94d9b66\
+6c94b78ea57641b39d67a8517d3d1b5c88942ef7c5\
+4c1731d8f023ff5428c0
         ;;
 esac
 
