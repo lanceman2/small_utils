@@ -27,8 +27,8 @@ tarname=gnuradio-$tag
 volksha512sum=
 #volktarfile=volk-v2.3.0.tar.gz
 #volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
-volktarfile=volk-v2.4.1.tar.gz
-volkurl=https://github.com/gnuradio/volk/tarball/v2.4.1
+volktarfile=volk-v2.4.1.xx0.tar.gz
+volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
 
 
 
