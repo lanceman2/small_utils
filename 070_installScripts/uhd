@@ -16,6 +16,8 @@
 #
 # so ya:
 # LD_LIBRARY_PATH=/usr/local/lib pip3 install mako docutils setuptools numpy
+#
+# It will tell you to upgrade pip3; so do it.
 
 
 
