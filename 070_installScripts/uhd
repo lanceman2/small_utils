@@ -1,13 +1,21 @@
 #!/bin/bash
 
+# We install "python3" from the bash script first.
+
+# Python3 is fucked up and does not find it's libraries when running,
+# dumb fucking python weenies don't know about relative linking:
+#
+# pip3 need LD_LIBRARY_PATH=/usr/local/lib
 
 # apt install cmake libboost-all-dev libncurses-dev\
  libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev libusb-1.0-0-dev
 
-# We tried to install these from apt
+# We tried to install these from apt; APT sucks for python3
 #python3 python-mako python-docutils python-setuptools
+# is a good way to fuck-up your system.
+#
 # so ya:
-# pip3 install mako docutils setuptools numpy
+# LD_LIBRARY_PATH=/usr/local/lib pip3 install mako docutils setuptools numpy
 
 
 
