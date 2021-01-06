@@ -24,7 +24,8 @@ function CheckEnv() {
 }
 
 
-CheckEnv PYTHONPATH "${pre}/lib/python3.8/site-packages"
+#CheckEnv PYTHONPATH "${pre}/lib/python3.8/site-packages"
+CheckEnv PYTHONPATH "${pre}/lib/python3.9/site-packages"
 CheckEnv LD_LIBRARY_PATH "${pre}/lib"
 CheckEnv GRC_BLOCKS_PATH "${pre}/share/gnuradio/grc/blocks"
 
