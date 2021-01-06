@@ -20,13 +20,16 @@
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
  pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools
 
-tag=v3.8.1.0
+tag=v3.8.2.0
 
 tarname=gnuradio-$tag
 
 volksha512sum=
-volktarfile=volk-v2.3.0.tar.gz
-volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
+#volktarfile=volk-v2.3.0.tar.gz
+#volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
+volktarfile=volk-v2.4.1.tar.gz
+volkurl=https://github.com/gnuradio/volk/tarball/v2.4.1
+
 
 
 set -exo pipefail
@@ -52,6 +55,10 @@ tarfile=$tarname.tar.gz
 sha512sum=
 
 case "$tag" in
+
+    v3.8.2.0)
+        sha512sum=
+        ;;
     v3.8.1.0)
         sha512sum=
         ;;
@@ -69,7 +76,6 @@ else
     sha512sum $volktarfile
     set -x
 fi
-
 
 
 if [ ! -e "$tarfile" ] ; then
