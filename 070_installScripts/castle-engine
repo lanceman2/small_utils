@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Dependences:
+# apt install fpc lazarus
+
+
+# We need to tell fpc where this directory is:
+globalunitdir=/usr/lib/x86_64-linux-gnu/fpc/3.0.4
+
+tag=v6.5-snapshot
+
+name=castle-engine
+
+tarname=$name-$tag
+
+
+
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/$name/$name/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v6.5-snapshot)
+        sha512sum=bc1c6f8491632253cc7c6d4934eb\
+3783969739dac495831e64d64c298ba98aaf575cb28262\
+fba85a3385dbf45e88893e914099bf978311960135164f\
+21279dd1
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+# We tried make with "Makefile" and it did not work.
+
+
+fpc fpmake.pp
+
+./fpmake --globalunitdir=$globalunitdir
+
+./fpmake install\
+ --globalunitdir=$globalunitdir\
+ --prefix=$prefix
+
+# This does not appear to be necessary.
+# --baseinstalldir=$prefix/base
+
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
