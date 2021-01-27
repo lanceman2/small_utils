@@ -3,22 +3,34 @@
 # Dependences:
 # apt install fpc lazarus
 
+# This script installs Castle Game Engine from a zip binary
 
-# We need to tell fpc where this directory is:
-globalunitdir=/usr/lib/x86_64-linux-gnu/fpc/3.0.4
+# We tried to install it from github source but it became clear that its'
+# build system is pretty fucked up.  They do some pretty stupid shit like
+# checking in binary dll files into the git repo.  So given they do shit
+# that is that fucking stupid, there is not much hope in making a it
+# from source proper.  So this is a fuck-it what-ever, I get paid to do
+# this stupid bullshit.
 
-tag=v6.5-snapshot
+tag=6.5-linux-x86_64
 
 name=castle-engine
 
-tarname=$name-$tag
+tarname=${name}-${tag}
+
+tarfile=${tarname}.zip
 
 
-
+# Who knows how long this url will be good for?:
+url=https://github.com/$name/$name/releases/download/snapshot/${tarfile}
 
 set -exo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"
+
+
+prefix=/usr/local/encap/${tarname}
+
 
 try=0
 tarnameTry=$tarname-try-$try
@@ -28,20 +40,15 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-url=https://github.com/$name/$name/tarball/$tag
 
-prefix=/usr/local/encap/$tarnameTry
-
-tarfile=$tarname.tar.gz
 
 sha512sum=
 
 case "$tag" in
-    v6.5-snapshot)
-        sha512sum=bc1c6f8491632253cc7c6d4934eb\
-3783969739dac495831e64d64c298ba98aaf575cb28262\
-fba85a3385dbf45e88893e914099bf978311960135164f\
-21279dd1
+    6.5-linux-x86_64)
+        sha512sum="124ebd611ed546a22cd99f894a2f177b\
+f4ec866e68dedbf093fcfb2cd6984e20f2d9465e317d22983aa\
+f1d6ed16b428e5231df8a1d93ba7cd030fe3bc823cac6"
         ;;
 esac
 
@@ -62,24 +69,11 @@ fi
 
 mkdir "$builddir"
 cd "$builddir"
-tar --strip-components=1 -xzf ../$tarfile
+unzip -d $PWD ../$tarfile
 
+rm -rf $prefix
 
-# We tried make with "Makefile" and it did not work.
-
-
-fpc fpmake.pp
-
-./fpmake --globalunitdir=$globalunitdir
-
-./fpmake install\
- --globalunitdir=$globalunitdir\
- --prefix=$prefix
-
-# This does not appear to be necessary.
-# --baseinstalldir=$prefix/base
-
-
+cp -a castle_game_engine $prefix
 
 cd -
 
@@ -90,4 +84,29 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
+
+exit 0
+
+
+# Feeble attempts at building from source.
+#export FPCDIR=$globalunitdir
+
+export CASTLE_FPC_OPTIONS="-I$PWD/src/base"
+export CASTLE_BUILD_TOOL_OPTIONS="--compiler-option=${CASTLE_FPC_OPTIONS}"
+
+make PREFIX=$prefix FPCDIR=$globalunitdir
+
+make install PREFIX=$prefix FPCDIR=$globalunitdir
+
+
+#fpc fpmake.pp
+#
+#./fpmake --globalunitdir=$globalunitdir
+#
+#./fpmake install\
+# --globalunitdir=$globalunitdir\
+# --prefix=$prefix
+#
+# This does not appear to be necessary.
+# --baseinstalldir=$prefix/base
 
