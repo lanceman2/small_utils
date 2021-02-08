@@ -59,7 +59,16 @@ cmake\
  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
  ../$tarname
 
+
 ninja -v -j 6
+
+cd -
+
+
+if [ "$(cd $tarname && git diff origin/master | wc -c)" != "0" ] ; then
+    echo "There may have been changes made to the source in $tarname"
+    exit 1
+fi
 
 
 set +x
