@@ -13,17 +13,17 @@
 
 tag=v5.9.0
 
-tarname=paraview-$tag
+tarname=paraview-git-$tag
 
 set -exo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"
 
 try=0
-tarnameTry=$tarname-try-$try
+tarnameTry=${tarname}-try-$try
 while [ -d "${tarnameTry}" ] ; do
     let try=$try+1
-    tarnameTry=$tarname-try-$try
+    tarnameTry=${tarname}-try-$try
 done
 builddir="${tarnameTry}"
 
@@ -32,11 +32,6 @@ url=https://gitlab.kitware.com/paraview/paraview.git
 
 
 prefix=/usr/local/encap/$tarnameTry
-
-
-
-mkdir "$builddir"
-cd "$builddir"
 
 
 if [ ! -e $tarname ] ; then
@@ -48,7 +43,7 @@ if [ ! -e $tarname ] ; then
 fi
 
 # It'd be nice to have a way to know that the build try does not change
-# the source code.
+# the source code.  We check with "git status" after.
 
 mkdir "$builddir"
 cd "$builddir"
@@ -64,7 +59,7 @@ cmake\
  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
  ../$tarname
 
-ninja
+ninja -v -j 6
 
 
 set +x
