@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# apt-get install git cmake build-essential libgl1-mesa-dev libxt-dev qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev ninja-build
+
+# We installed python3 from source, then:
+# pip3 install numpy
+
+
+# Looks like there is no way to get a tarball directly from a server.  We
+# end up downloading much more data that is not necessary for building the
+# software package.
+
+
+tag=v5.9.0
+
+tarname=paraview-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://gitlab.kitware.com/paraview/paraview.git
+
+
+prefix=/usr/local/encap/$tarnameTry
+
+
+
+mkdir "$builddir"
+cd "$builddir"
+
+
+if [ ! -e $tarname ] ; then
+    git clone $url $tarname
+    cd $tarname
+    git checkout $tag
+    git submodule update --init --recursive
+    cd -
+fi
+
+# It'd be nice to have a way to know that the build try does not change
+# the source code.
+
+mkdir "$builddir"
+cd "$builddir"
+
+cmake\
+ -GNinja\
+ -DPARAVIEW_USE_PYTHON=ON\
+ -DPARAVIEW_USE_MPI=ON\
+ -DVTK_SMP_IMPLEMENTATION_TYPE=TBB\
+ -DCMAKE_BUILD_TYPE=Release\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
+ ../$tarname
+
+ninja
+
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
