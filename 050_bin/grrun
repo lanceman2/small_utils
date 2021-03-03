@@ -30,7 +30,7 @@ CheckEnv LD_LIBRARY_PATH "${pre}/lib"
 CheckEnv GRC_BLOCKS_PATH "${pre}/share/gnuradio/grc/blocks"
 
 
-
+[ "$1" = "--paths" ] && return
 
 [ -n "$_JUST_PATHS_" ] && return
 
@@ -53,6 +53,15 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
     and GRC_BLOCKS_PATH set to:
 
     $GRC_BLOCKS_PATH
+
+
+                        OPTIONS
+  ---------------------------------------------------------------------
+
+    PATHS  Setting variable _JUST_PATHS_ to any string before sourcing
+           this file in your bash script will just set environment
+           variables PYTHONPATH, LD_LIBRARY_PATH, and GRC_BLOCKS_PATH.
+
 
 EOF
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-tag=v14.13.1
+tag=v12.18.1
 
 tarname=node-$tag
 
@@ -33,7 +33,7 @@ case "$tag" in
 01d7a46bf56a6733275590b02aef916a382\
 f10f4
         ;;
-    v14.13.1)
+    v15.11.0)
         sha512sum=
         ;;
 esac
