@@ -1,0 +1,87 @@
+#!/bin/bash
+
+#To get a list of what broken:
+# cd BUILD && cmake .. -LAH > xxx
+
+############################ DEPENDENCIES #########################################
+#
+# gunradio  script in here.
+#
+# apt install clang
+#
+
+tag=8b872b5
+
+tarname=gr-specst-$tag
+
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+topdir=$PWD
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/kit-cel/gr-specest/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+
+    v0000)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+
+tar --strip-components=1 -xzf ../$tarfile
+
+mkdir BUILD
+cd BUILD
+
+export CXX=clang++
+export CC=clang
+
+cmake .. -G"Unix Makefiles"\
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"
+
+# it appears they made the build process interactive.
+echo "N" | make VERBOSE=1
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
