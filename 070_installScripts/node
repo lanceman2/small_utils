@@ -1,6 +1,12 @@
 #!/bin/bash
 
 
+# DEPENDENCIES
+#
+# Looks like it requires python2:
+#
+# apt install python
+
 tag=v12.18.1
 
 tarname=node-$tag
