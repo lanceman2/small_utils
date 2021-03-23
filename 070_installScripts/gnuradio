@@ -14,7 +14,12 @@
  qtdeclarative5-dev qml-module-qtquick-controls\
  portaudio19-dev libqwt-qt5-dev
 
+#
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
+# We installed log4cpp from a bash script from here
+# That script can't download the source for log4cpp,
+# you need to do that via an interactive browser.
+
 
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
