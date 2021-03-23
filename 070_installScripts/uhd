@@ -14,7 +14,7 @@
 #python3 python-mako python-docutils python-setuptools
 # is a good way to fuck-up your system.
 #
-# so ya:
+# so ya You do not need to be root to do this:
 # LD_LIBRARY_PATH=/usr/local/lib pip3 install mako docutils setuptools numpy
 #
 # It will tell you to upgrade pip3; so do it.
