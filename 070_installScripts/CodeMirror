@@ -1,0 +1,83 @@
+#!/bin/bash
+
+
+# DEPENDENCIES
+#
+# node  See "node" installation bash script in here.
+#
+# npm install --global rollup
+# npm install --global @rollup/plugin-buble
+# apt install yui-compressor
+
+tag=5.61.0
+
+tarname=CodeMirror-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/codemirror/CodeMirror/tarball/$tag
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    5.61.0)
+        sha512sum=dac856ce2ccf44ada862aef01031b7b\
+325b7d870c6c3ae7d1d03f100ec86fc5f34c28a67d4f0cc88\
+ff8ef0ee1a69b90c766ef716765c83a2542ed442697a8a70
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+export NODE_PATH=/usr/local/lib/node_modules
+
+npm run-script build
+
+cd lib
+
+yui-compressor --type css --line-break 80\
+ codemirror.css -o codemirror.min.css
+yui-compressor --type js  --line-break 80\
+ codemirror.js  -o codemirror.min.js
+
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY built:
+   $PWD/codemirror.min.js
+     and
+   $PWD/codemirror.min.css
+
+   They are not installed.
+
+EOF
