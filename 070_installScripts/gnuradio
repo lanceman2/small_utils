@@ -23,7 +23,7 @@
 
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
- pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools librtlsdr-dev
 
 tag=v3.8.2.0
 
@@ -137,7 +137,7 @@ cmake .. -G"Unix Makefiles"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
 
-make VERBOSE=1 -j10
+make VERBOSE=1 -j30
 make install
 
 set +x
