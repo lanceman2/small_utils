@@ -57,12 +57,16 @@ mkdir "$builddir"
 cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
+
 export NODE_PATH=/usr/local/lib/node_modules
 
+# lib/codemirror.js is a pretty large javaScript file.
+# This builds lib/codemirror.js
 npm run-script build
 
 cd lib
 
+# Now compress
 yui-compressor --type css --line-break 80\
  codemirror.css -o codemirror.min.css
 yui-compressor --type js  --line-break 80\
