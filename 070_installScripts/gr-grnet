@@ -1,0 +1,93 @@
+#!/bin/bash
+
+#To get a list of what broken:
+# cd BUILD && cmake .. -LAH > xxx
+
+############################ DEPENDENCIES #########################################
+#
+# apt install libpcap-dev
+
+# this was the current master checkin.  It has no tagged releases.  It has
+# no tags at all.  So we use the checkin hash.
+
+#tag=e6dfd14  uses GNUradio version 3.9
+
+tag=b02016043b67a15f27134a4f0b0d43f5d1b9ed6d
+
+tarname=gr-grnet-$tag
+
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+topdir=$PWD
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+#https://github.com/ghostop14/gr-grnet.git
+url=https://github.com/ghostop14/gr-grnet/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+
+    e6dfd14)
+        sha512sum=
+        ;;
+    b02016043b67a15f27134a4f0b0d43f5d1b9ed6d)
+        sha512sum=
+        ;;
+
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+
+tar --strip-components=1 -xzf ../$tarfile
+
+mkdir BUILD
+cd BUILD
+
+#export CXX=clang++
+#export CC=clang
+
+cmake .. -G"Unix Makefiles"\
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"
+
+# it appears they made the build process interactive.
+make VERBOSE=1
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
