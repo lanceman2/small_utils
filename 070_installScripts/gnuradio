@@ -5,7 +5,7 @@
 
 ############################ DEPENDENCIES #########################################
 
-# We need to install python3 and uhd from scripts in this directory
+# We need to install python3, pybind11, and uhd from scripts in this directory
 
 # apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev\
  libgirepository1.0-dev libzmq3-dev libsphinxbase-dev sphinxbase-utils\
