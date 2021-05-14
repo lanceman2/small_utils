@@ -1,7 +1,8 @@
 #!/bin/bash
 
 
-tag=v2.5.0
+#tag=v2.5.0
+tag=v2.6.2
 
 tarname=pybind11-$tag
 
@@ -33,11 +34,14 @@ case "$tag" in
 96f23a18b91c60551e0393848155e0f2ff01e58c6b47175542\
 fa581b74f853a9073f4f20af0c6532fdca1bcda3df5b7b
         ;;
+    v2.6.2)
+        sha512sum=
+        ;;
 esac
 
 
 if [ ! -e "$tarfile" ] ; then
-    wget $url -O $tarfile
+    wget --no-check-certificate $url -O $tarfile
 fi
 
 
