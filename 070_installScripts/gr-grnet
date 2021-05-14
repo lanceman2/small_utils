@@ -10,9 +10,9 @@
 # this was the current master checkin.  It has no tagged releases.  It has
 # no tags at all.  So we use the checkin hash.
 
-#tag=e6dfd14  uses GNUradio version 3.9
+tag=e6dfd14 #  uses GNUradio version 3.9
 
-tag=b02016043b67a15f27134a4f0b0d43f5d1b9ed6d
+#tag=b02016043b67a15f27134a4f0b0d43f5d1b9ed6d # works with gnuradio 3.8
 
 tarname=gr-grnet-$tag
 

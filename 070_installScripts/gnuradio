@@ -25,15 +25,22 @@
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
  pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools librtlsdr-dev
 
-tag=v3.8.2.0
+# After installing this consider installing gr-grnet gr-specst gr-osmosdr
+
+
+#tag=v3.8.2.0 #new one is: v3.9.1.0
+tag=v3.9.1.0
 
 tarname=gnuradio-$tag
 
-volksha512sum=
+# volk is pulled into gnuradio 3.9 automatically
+#volksha512sum=
+
 #volktarfile=volk-v2.3.0.tar.gz
 #volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
-volktarfile=volk-v2.4.1.xx0.tar.gz
-volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
+
+#volktarfile=volk-v2.4.1.xx0.tar.gz
+#volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
 
 
 
@@ -70,17 +77,22 @@ case "$tag" in
 esac
 
 
-if [ ! -e $volktarfile ] ; then
-    wget --no-check-certificate $volkurl -O $volktarfile
-fi
+function GetVolk() {
 
-if [ -n "$volksha512sum" ] ; then
-    echo "$volksha512sum  $volktarfile" | sha512sum -c -
-else
-    set +x
-    sha512sum $volktarfile
-    set -x
-fi
+    if [ ! -e $volktarfile ] ; then
+        wget --no-check-certificate $volkurl -O $volktarfile
+    fi
+
+    if [ -n "$volksha512sum" ] ; then
+        echo "$volksha512sum  $volktarfile" | sha512sum -c -
+    else
+        set +x
+        sha512sum $volktarfile
+        set -x
+    fi
+}
+
+#GetVolk
 
 
 if [ ! -e "$tarfile" ] ; then
@@ -102,10 +114,10 @@ cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
 
-mkdir -p volk
-cd volk
-tar --strip-components=1 -xzf $topdir/$volktarfile
-cd -
+#mkdir -p volk
+#cd volk
+#tar --strip-components=1 -xzf $topdir/$volktarfile
+#cd -
 
 mkdir BUILD
 cd BUILD
@@ -137,7 +149,7 @@ cmake .. -G"Unix Makefiles"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
 
-make VERBOSE=1 -j30
+make VERBOSE=1 -j11
 make install
 
 set +x
