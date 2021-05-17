@@ -7,7 +7,7 @@
 #
 # gunradio  script in here.
 #
-# apt install clang
+# apt install clang libblas-dev liblapack-dev
 #
 
 tag=8b872b5

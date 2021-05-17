@@ -6,8 +6,8 @@
 ############################ DEPENDENCIES #########################################
 
 
-#tag=v0.2.1 # worked with GNUradio 3.8
-tag=v0.2.3
+tag=v0.2.1 # worked with GNUradio 3.8
+#tag=v0.2.3
 
 tarname=gr-osmosdr-$tag
 

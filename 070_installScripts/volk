@@ -1,11 +1,47 @@
 #!/bin/bash
 
+set -exo pipefail
 
-tag=v2.3.0
+
+#tag=v2.3.0
+tag=v2.4.1
 
 tarname=volk-$tag
 
-set -exo pipefail
+
+# need another package "cpu_features"
+cpu_features_tag=a8397ba459
+cpu_features_tarfile=cpu_features-$cpu_features_tag.tar.gz
+cpu_features_url=https://github.com/google/cpu_features/tarball/$cpu_features_tag
+sha512sum=
+
+case "$cpu_features_tag" in
+    a8397ba459)
+        sha512sum=
+        ;;
+esac
+
+function Get_cpu_features() {
+
+    if [ ! -e $cpu_features_tarfile ] ; then
+        wget --no-check-certificate $cpu_features_url -O $cpu_features_tarfile
+    fi
+
+    if [ -n "$sha512sum" ] ; then
+        echo "$sha512sum  $cpu_features_tarfile" | sha512sum -c -
+    else
+        set +x
+        sha512sum $cpu_features_tarfile
+        set -x
+    fi
+}
+Get_cpu_features
+
+
+
+# reset sha512sum for getting and checking next package
+sha512sum=
+
 
 cd "$(dirname ${BASH_SOURCE[0]})"
 
@@ -33,6 +69,9 @@ e8680a1d902500c4c36303b804d2d82fd689f56fcd4b\
 a59c223ff31d26f6a2da43d997449540843b7853f87f\
 0311c76baba374
         ;;
+    v2.4.1)
+        sha512sum=
+        ;;
 esac
 
 
@@ -50,13 +89,25 @@ else
 fi
 
 
-set +x
-echo "Got $tarfile  If you need to install it, edit this script"
-exit
+#set +x
+#echo "Got $tarfile  If you need to install it, edit this script"
+#set -x
 
 
 mkdir "$builddir"
+
+
+# This 4 lines the required cpu_features source code in place
+mkdir $builddir/cpu_features
+cd $builddir/cpu_features
+tar --strip-components=1 -xzf ../../$cpu_features_tarfile
+cd -
+
+
 cd "$builddir"
+
+
+
 
 tar --strip-components=1 -xzf ../$tarfile
 
