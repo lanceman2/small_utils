@@ -10,9 +10,12 @@
 # this was the current master checkin.  It has no tagged releases.  It has
 # no tags at all.  So we use the checkin hash.
 
-#tag=e6dfd14 #  uses GNUradio version 3.9
+tag=e6dfd14 #  uses GNUradio version 3.9
 
-tag=b02016043b67a15f # works with gnuradio 3.8
+#tag=b02016043b67a15f # works with gnuradio 3.8
+
+export pybind11_DIR=/usr/local/lib/python3.9/site-packages/pybind11-2.6.2-py3.9.egg/pybind11/share/cmake/pybind11
+
 
 tarname=gr-grnet-$tag
 
