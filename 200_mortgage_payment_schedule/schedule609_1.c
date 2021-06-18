@@ -8,7 +8,8 @@
 // All numbers in pennies.
 
 //static const int64_t start_principle = 15754792; // pennies
-static const int64_t start_principle = 10179117; // pennies
+//static const int64_t start_principle = 10179117; // pennies
+static const int64_t start_principle = 7526267 - 1500000; // pennies
 
 static const double rate = 0.03625/12.0; // /12 ==> monthly
 static int64_t default_payment = 750000; // pennies
@@ -92,7 +93,7 @@ int main(int argc, char **argv)
     int64_t principle = start_principle; // balance left
     int64_t total = 0;   // pennies total paid
     // Initialize date
-    static int month_num = 1; // 1 - 12
+    static int month_num = 6; // 1 - 12
     static int year = 2021; // 2017 to 2040 or whatever
 
     printf("months, years, month, year, payment, princ_paid,"
@@ -128,4 +129,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
