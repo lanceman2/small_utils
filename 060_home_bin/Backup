@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Copies file in my home directory to a backup directory
+
+set -e
+
+storeRoot=/a/home/lance
+
+cd $HOME
+
+
+saveFiles=(
+ projects
+ Pictures
+ classes
+ webserver
+ Videos
+ public_html
+ bin
+ Desktop
+ Music
+ git/quickstream
+ git/quickplot
+ git/quickscope
+ p
+ .bashrc
+ .vimrc
+)
+
+
+function Line() {
+    echo -e "\n========================================================================="
+}
+
+
+# To delete or not to delete
+delete="--delete"
+#delete=
+
+
+for f in ${saveFiles[*]} ; do
+    Line
+    if [ -d "$f" ] ; then
+        # $f is a directory so rsync needs an ending '/'
+        f="$f/"
+    elif [ ! -e "$f" ] ; then
+        echo "Skipping: $f   File does not exist"
+        continue;
+    fi
+    set -x
+    rsync $delete --archive --verbose $f $storeRoot/$f
+    set +x
+done
+
+Line
+
+set -x
+sudo rsync $delete --archive --verbose /etc/ /a/home/lance/etc_backup/
+set +x
+
+Line
