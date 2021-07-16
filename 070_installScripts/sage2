@@ -1,0 +1,76 @@
+#!/bin/bash
+
+#installing https://bitbucket.org/sage2/sage2.git
+
+# DEPENDENCIES
+#
+
+tag=b59dce824aa435d325fe3db5cfbf6ab264e24813
+
+tarname=sage2-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url="https://bitbucket.org/sage2/sage2/get/${tag}.tar.gz"
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+
+
+sha512sum=
+
+case "$tag" in
+    b59dce824aa435d325fe3db5cfbf6ab264e24813)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+mkdir node_modules
+
+
+
+# MORE HERE .....................
+
+
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
