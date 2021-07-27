@@ -4,6 +4,10 @@
 
 # DEPENDENCIES
 #
+# python3 install script from this directory:
+#
+# pip3 install 
+#
 
 tag=b59dce824aa435d325fe3db5cfbf6ab264e24813
 
