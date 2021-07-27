@@ -80,7 +80,6 @@ cmake\
  -DPARAVIEW_USE_VRPN=ON\
  -DVRPN_INCLUDE_DIR=/usr/local/include\
  -DVRPN_LIBRARY_DIR=/usr/local/lib\
- -DPARAVIEW_ENABLE_NVPIPE=ON\
  ../$tarname
 
 
