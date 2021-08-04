@@ -58,6 +58,10 @@ cd "$builddir"
 # WTF is:      load the “VR Plugin” 
 
 
+# We installed cmake from source and cmake from source sucks,
+# therefore (the writers of cmake are dumb fucks):
+export CMAKE_ROOT=/usr/share/cmake
+
 
 # If we have nvidia cards and drivers ???
 #-DPARAVIEW_ENABLE_NVPIPE=ON\

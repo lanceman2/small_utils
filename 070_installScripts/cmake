@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# There is a problem with running cmake when you install from source:
+# said cmake program will not run without setting CMAKE_ROOT and
+# there is no configuration option to set CMAKE_ROOT; so we must run
+# cmake like so:
+#
+#     % CMAKE_ROOT=/usr/share/cmake cmake --version
+#
+#
 
 tag=v3.14.6 # 2019-07-16 07:08:05
 
@@ -52,7 +60,8 @@ cd "$builddir"
 
 tar --strip-components=1 -xzf ../$tarfile
 
-./bootstrap --prefix=$prefix
+#./bootstrap --prefix=$prefix
+./configure --prefix=$prefix
 
 make -j10
 make install
