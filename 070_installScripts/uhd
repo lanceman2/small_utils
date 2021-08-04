@@ -1,9 +1,29 @@
 #!/bin/bash
 
+# We install "python3" from the bash script first.
 
-tag=v3.14.6 # 2019-07-16 07:08:05
+# Python3 is fucked up and does not find it's libraries when running,
+# dumb fucking python weenies don't know about relative linking:
+#
+# pip3 needs LD_LIBRARY_PATH=/usr/local/lib
 
-tarname=cmake-$tag
+# apt install cmake libboost-all-dev libncurses-dev\
+ libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev libusb-1.0-0-dev
+
+# We tried to install these from apt; APT sucks for python3
+#python3 python-mako python-docutils python-setuptools
+# is a good way to fuck-up your system.
+#
+# so ya You do not need to be root to do this:
+# LD_LIBRARY_PATH=/usr/local/lib pip3 install mako docutils setuptools numpy
+#
+# It will tell you to upgrade pip3; so do it.
+
+
+
+tag=v4.0.0.0
+
+tarname=uhd-$tag
 
 set -exo pipefail
 
@@ -18,7 +38,7 @@ done
 builddir="${tarnameTry}"
 
 
-url=https://github.com/Kitware/CMake/tarball/$tag
+url=https://github.com/EttusResearch/uhd/tarball/$tag
 
 prefix=/usr/local/encap/$tarnameTry
 
@@ -28,8 +48,17 @@ sha512sum=
 
 
 case "$tag" in
-    v3.14.6)
-        sha512sum=
+    v4.0.0.0)
+        sha512sum=e931431a9d8bac446191dc40c76b\
+834b49abb443a407fce981e095e1948ca7174608a13a98\
+eab833ceee00008bcd9fa15056f2706fcd046feb67ab33\
+8ca85baf
+        ;;
+    3.15.0.0)
+        sha512sum=cf83e1357eefb8bdf1542850d66d8\
+007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85\
+f2b0ff8318d2877eec2f63b931bd47417a81a538327af927\
+da3e
         ;;
 esac
 
@@ -52,9 +81,31 @@ cd "$builddir"
 
 tar --strip-components=1 -xzf ../$tarfile
 
-./bootstrap --perfix=$prefix
+cd host
+mkdir BUILD
+cd BUILD
 
-make -j10
+cmake .. -G"Unix Makefiles"\
+ -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
+ -DUHD_IMAGES_DIR:BOOL=TRUE\
+ -DENABLE_USB=TRUE\
+ -DENABLE_B200=TRUE\
+ -DENABLE_E300=TRUE\
+ -DENABLE_USRP2=TRUE\
+ -DENABLE_RFNOC=TRUE\
+ -DENABLE_X300=TRUE\
+ -DLIBUSB_INCLUDE_DIRS=/usr/include/libusb-1.0\
+ -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
+ -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3
+
+
+# -DRUNTIME_PYTHONPATH:FILEPATH=/usr/bin/python3:/usr/local/lib/python3/dist-packages/gnuradio/gr:/usr/local/lib/python3/dist-packages/gnuradio/uhd
+
+
+make VERBOSE=1 -j10
 make install
 
 set +x
