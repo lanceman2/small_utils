@@ -52,7 +52,7 @@ cd "$builddir"
 
 tar --strip-components=1 -xzf ../$tarfile
 
-./bootstrap --perfix=$prefix
+./bootstrap --prefix=$prefix
 
 make -j10
 make install
