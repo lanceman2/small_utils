@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# apt install git cmake build-essential libgl1-mesa-dev libxt-dev qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev ninja-build
+# apt install git cmake build-essential libgl1-mesa-dev libxt-dev\
+ qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev\
+ qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev\
+ ninja-build cmake
 
 # We installed python3 from source using script in this dir, then:
 # pip3 install numpy openpmd_api
@@ -91,7 +94,7 @@ cmake\
 
 exit
 
-ninja -v -j 7
+ninja -v -j 40
 ninja -v install
 
 cd -
