@@ -2,7 +2,7 @@
 
 # apt install git cmake build-essential libgl1-mesa-dev libxt-dev qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev ninja-build
 
-# We installed python3 from source, then:
+# We installed python3 from source using script in this dir, then:
 # pip3 install numpy openpmd_api
 
 
@@ -48,7 +48,12 @@ fi
 mkdir "$builddir"
 cd "$builddir"
 
-# If we have nvidia cards and drivers
+
+# WTF is:      load the “VR Plugin” 
+
+
+
+# If we have nvidia cards and drivers ???
 #-DPARAVIEW_ENABLE_NVPIPE=ON\
 
 cmake\
@@ -63,6 +68,8 @@ cmake\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
  -DPARAVIEW_USE_MPI=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRPN=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRUI=ON\
  -DPARAVIEW_BUILD_PLUGIN_VRPlugin=ON\
  -DPARAVIEW_ENABLE_VISITBRIDGE=ON\
  -DPARAVIEW_ENABLE_NVPIPE=OFF\
@@ -82,6 +89,7 @@ cmake\
  -DVRPN_LIBRARY_DIR=/usr/local/lib\
  ../$tarname
 
+exit
 
 ninja -v -j 7
 ninja -v install
