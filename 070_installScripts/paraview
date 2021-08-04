@@ -3,7 +3,7 @@
 # apt install git cmake build-essential libgl1-mesa-dev libxt-dev qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev ninja-build
 
 # We installed python3 from source, then:
-# pip3 install numpy
+# pip3 install numpy openpmd_api
 
 
 # Looks like there is no way to get a tarball directly from a server.  We
