@@ -84,6 +84,7 @@ cmake\
 
 
 ninja -v -j 7
+ninja -v install
 
 cd -
 
