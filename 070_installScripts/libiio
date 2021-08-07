@@ -1,0 +1,99 @@
+#!/bin/bash
+
+# install Library for interfacing with Linux IIO devices
+#
+# We had the Adalm-pluto SDR 
+# Product: PlutoSDR (ADALM-PLUTO)
+# Manufacturer: Analog Devices Inc.
+# SerialNumber: 1044734c9605001108000f00418f4f2690
+#
+# Can't seem to find a Model number, maybe the Product is good enough.
+#
+# Running "sudo udevadm monitor -e"; still can't see a model number.
+#
+
+
+set -exo pipefail
+
+tag=v0.21
+
+tarname=libiio-$tag
+
+sha512sum=
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/analogdevicesinc/libiio/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    1.6.8)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+
+mkdir "$builddir"
+
+cd $builddir
+
+tar --strip-components=1 -xzf ../$tarfile
+
+mkdir BUILD
+cd BUILD
+
+# could be used to install as root, but we avoided that
+# and copied udev rules file by hand.
+#
+# udev rule filename is: 90-libiio.rules
+
+cmake .. -G"Unix Makefiles"\
+ -DINSTALL_UDEV_RULE=OFF\
+ -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE
+
+make VERBOSE=1 -j7
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+
+  You may want to figure out what file goes in /etc/udev/rules.d/
+
+
+EOF
