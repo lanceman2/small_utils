@@ -62,8 +62,6 @@ cd $builddir
 
 tar --strip-components=1 -xzf ../$tarfile
 
-cd host/
-
 mkdir BUILD
 cd BUILD
 
