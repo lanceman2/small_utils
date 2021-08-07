@@ -1,9 +1,15 @@
 #!/bin/bash
 
-# apt-get install git cmake build-essential libgl1-mesa-dev libxt-dev qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev ninja-build
+# apt install git cmake build-essential libgl1-mesa-dev libxt-dev\
+ qt5-default libqt5x11extras5-dev libqt5help5 qttools5-dev\
+ qtxmlpatterns5-dev-tools libqt5svg5-dev libopenmpi-dev libtbb-dev\
+ ninja-build
 
-# We installed python3 from source, then:
-# pip3 install numpy
+# Needed a newer version or cmake for on systems with Ubuntu 18.04,
+# so we built and installed cmake from source.
+
+# We installed python3 from source using script in this dir, then:
+# pip3 install numpy openpmd_api
 
 
 # Looks like there is no way to get a tarball directly from a server.  We
@@ -48,7 +54,16 @@ fi
 mkdir "$builddir"
 cd "$builddir"
 
-# If we have nvidia cards and drivers
+
+# WTF is:      load the “VR Plugin” 
+
+
+# We installed cmake from source and cmake from source sucks,
+# therefore (the writers of cmake are dumb fucks):
+export CMAKE_ROOT=/usr/share/cmake
+
+
+# If we have nvidia cards and drivers ???
 #-DPARAVIEW_ENABLE_NVPIPE=ON\
 
 cmake\
@@ -57,10 +72,15 @@ cmake\
  -DPARAVIEW_USE_MPI=ON\
  -DVTK_SMP_IMPLEMENTATION_TYPE=TBB\
  -DCMAKE_BUILD_TYPE=Release\
+ -DBUILD_SHARED_LIB=ON\
+ -DPARAVIEW_BUILD_QT_GUI=ON\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
  -DPARAVIEW_USE_MPI=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRPN=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRUI=ON\
+ -DPARAVIEW_BUILD_PLUGIN_VRPlugin=ON\
  -DPARAVIEW_ENABLE_VISITBRIDGE=ON\
  -DPARAVIEW_ENABLE_NVPIPE=OFF\
  -DPARAVIEW_ENABLE_GDAL=OFF\
@@ -74,10 +94,15 @@ cmake\
  -DPARAVIEW_ENABLE_XDMF3=ON\
  -DPARAVIEW_ENABLE_FFMPEG=OFF\
  -DPARAVIEW_ENABLE_COSMOTOOLS=OFF\
+ -DPARAVIEW_USE_VRPN=ON\
+ -DVRPN_INCLUDE_DIR=/usr/local/include\
+ -DVRPN_LIBRARY_DIR=/usr/local/lib\
  ../$tarname
 
+exit
 
-ninja -v -j 6
+ninja -v -j 40
+ninja -v install
 
 cd -
 

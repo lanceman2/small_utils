@@ -1,17 +1,17 @@
 #!/bin/bash
 
-#installing https://bitbucket.org/sage2/sage2.git
-
-# DEPENDENCIES
+# There is a problem with running cmake when you install from source:
+# said cmake program will not run without setting CMAKE_ROOT and
+# there is no configuration option to set CMAKE_ROOT; so we must run
+# cmake like so:
 #
-# python3 install script from this directory:
+#     % CMAKE_ROOT=/usr/share/cmake cmake --version
 #
-# pip3 install 
 #
 
-tag=b59dce824aa435d325fe3db5cfbf6ab264e24813
+tag=v3.14.6 # 2019-07-16 07:08:05
 
-tarname=sage2-$tag
+tarname=cmake-$tag
 
 set -exo pipefail
 
@@ -25,18 +25,18 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-url="https://bitbucket.org/sage2/sage2/get/${tag}.tar.gz"
+
+url=https://github.com/Kitware/CMake/tarball/$tag
 
 prefix=/usr/local/encap/$tarnameTry
 
 tarfile=$tarname.tar.gz
 
-
-
 sha512sum=
 
+
 case "$tag" in
-    b59dce824aa435d325fe3db5cfbf6ab264e24813)
+    v3.14.6)
         sha512sum=
         ;;
 esac
@@ -57,18 +57,14 @@ fi
 
 mkdir "$builddir"
 cd "$builddir"
+
 tar --strip-components=1 -xzf ../$tarfile
 
-mkdir node_modules
+#./bootstrap --prefix=$prefix
+./configure --prefix=$prefix
 
-
-
-# MORE HERE .....................
-
-
-
-
-cd -
+make -j10
+make install
 
 set +x
 
@@ -77,4 +73,3 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
-

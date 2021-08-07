@@ -88,7 +88,7 @@ CFLAGS="-g -Wall"\
  --prefix=$prefix\
  --enable-shared\
  --with-ssl=/usr/local/lib
-make -j5
+make -j30
 make install
 
 cd -
