@@ -86,6 +86,8 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
    you may need to copy $builddir/airspy-tools/52-airspy.rules to
-   /etc/udev/rules.d/52-airspy.rules as root.
+   /etc/udev/rules.d/52-airspy.rules as root like:
+
+   sudo cp -i $builddir/airspy-tools/52-airspy.rules /etc/udev/rules.d/
 
 EOF
