@@ -65,6 +65,9 @@ tar --strip-components=1 -xzf ../$tarfile
 mkdir BUILD
 cd BUILD
 
+# could be used to install as root, but we avoided that
+# and copied it by hand:
+#-DINSTALL_UDEV_RULES=ON\
 
 cmake .. -G"Unix Makefiles"\
  -DINSTALL_UDEV_RULES=ON\
@@ -81,5 +84,8 @@ set +x
 cat << EOF
 
    SUCCESSFULLY installed $tarname in $prefix
+
+   you may need to copy $builddir/airspy-tools/52-airspy.rules to
+   /etc/udev/rules.d/52-airspy.rules as root.
 
 EOF
