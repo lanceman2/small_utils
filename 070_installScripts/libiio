@@ -94,6 +94,7 @@ cat << EOF
 
 
   You may want to figure out what file goes in /etc/udev/rules.d/
+  maybe 90-libiio.rules
 
 
 EOF
