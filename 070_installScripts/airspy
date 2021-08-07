@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# library for AIRSPY DISCOVERY SDR USB device, ref: http://airspy.com
+# the software this installs is called airspyone_host what ever the fuck
+# that means.
+#
+# note: this is getting code from github.com
+
+
+set -exo pipefail
+
+tag=v1.0.10
+
+tarname=airspy-$tag
+
+sha512sum=
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/airspy/airspyone_host/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v1.0.10)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+
+mkdir "$builddir"
+
+cd $builddir
+
+tar --strip-components=1 -xzf ../$tarfile
+
+cd host/
+
+mkdir BUILD
+cd BUILD
+
+
+cmake .. -G"Unix Makefiles"\
+ -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE
+
+make VERBOSE=1 -j4
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
