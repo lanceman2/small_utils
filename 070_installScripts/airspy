@@ -67,6 +67,7 @@ cd BUILD
 
 
 cmake .. -G"Unix Makefiles"\
+ -DINSTALL_UDEV_RULES=ON\
  -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
