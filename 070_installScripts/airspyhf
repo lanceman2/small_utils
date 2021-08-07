@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# This will not work for the AIRSPYHF, so I think.  See script file
-# airspyhf for that hardware device.
-
-# library for AIRSPY DISCOVERY SDR USB device, ref: http://airspy.com
-# the software this installs is called airspyone_host what ever the fuck
-# that means.
+# Install library for AIRSPY (HF) DISCOVERY SDR USB device, ref: http://airspy.com
 #
 # note: this is getting code from github.com
 
@@ -30,6 +25,8 @@
 # 
 # So
 # ATTR{idVendor}=="03eb", ATTR{idProduct}=="800c", SYMLINK+="airspy-%k", MODE="660", GROUP="plugdev"
+# or
+# ATTR{idVendor}=="03eb", ATTR{idProduct}=="800c", SYMLINK+="airspyhf-%k", MODE="660", GROUP="plugdev"
 #
 # We see file: /dev/airspy-1-12
 #
@@ -37,10 +34,9 @@
 
 set -exo pipefail
 
-#tag=v1.0.9
-tag=v1.0.10
+tag=1.6.8
 
-tarname=airspy-$tag
+tarname=airspyhf-$tag
 
 # see notes above
 ID_VENDOR_ID=03eb
@@ -58,7 +54,7 @@ done
 builddir="${tarnameTry}"
 
 
-url=https://github.com/airspy/airspyone_host/tarball/$tag
+url=https://github.com/airspy/airspyhf/tarball/$tag
 
 prefix=/usr/local/encap/$tarnameTry
 
@@ -67,7 +63,7 @@ tarfile=$tarname.tar.gz
 sha512sum=
 
 case "$tag" in
-    v1.0.10)
+    1.6.8)
         sha512sum=
         ;;
 esac
@@ -117,12 +113,8 @@ cat << EOF
 
    SUCCESSFULLY installed $tarname in $prefix
 
-   you may need to copy $builddir/airspy-tools/52-airspy.rules to
-   /etc/udev/rules.d/52-airspy.rules as root like:
 
-   sudo cp -i $builddir/airspy-tools/52-airspy.rules /etc/udev/rules.d/
-
-   FAILS but try
+  You may want to:
 
    sudo bash -c 'echo "ATTR{idVendor}==\\"$ID_VENDOR_ID\\",\
  ATTR{idProduct}==\\"60a1\\",\
