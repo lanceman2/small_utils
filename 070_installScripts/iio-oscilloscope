@@ -75,6 +75,7 @@ cat << EOF > BUILD_PATH/ldconfig
 #!/bin/bash
 echo 'NOT RUNNING ldconfig'
 EOF
+chmod 755 BUILD_PATH/ldconfig
 export PATH=$PWD/BUILD_PATH:${PATH}
 
 
