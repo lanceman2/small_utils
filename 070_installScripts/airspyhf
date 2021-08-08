@@ -9,7 +9,6 @@
 # % sudo udevadm monitor -e
 # Now plug it in a USB port.
 #
-# Looking at the installed udev rule installed:
 # cat /etc/udev/rules.d/52-airspy.rules
 # Gives:
 #   ATTR{idVendor}=="1d50", ATTR{idProduct}=="60a1", SYMLINK+="airspy-%k", MODE="660", GROUP="plugdev"
@@ -28,9 +27,11 @@
 # or
 # ATTR{idVendor}=="03eb", ATTR{idProduct}=="800c", SYMLINK+="airspyhf-%k", MODE="660", GROUP="plugdev"
 #
+# Both where installed in file /etc/udev/rules.d/52-airspy.rules and both
+# worked in a test; re-plugging the USB between tests.
+#
 # We see file: /dev/airspy-1-12
 #
-
 
 set -exo pipefail
 
@@ -38,8 +39,16 @@ tag=1.6.8
 
 tarname=airspyhf-$tag
 
-# see notes above
-ID_VENDOR_ID=03eb
+
+# This works for our hardware USB device:
+#
+# Note: the escape sequence hell (\\\) is required in order to triple
+# process it, once with bash = here, once with cat, and one more time with
+# cut and paste into an interactive bash shell by a user of this bash
+# script.
+esc_udev_rule="ATTR{idVendor}==\\\"03eb\\\", ATTR{idProduct}==\\\"800c\\\",\
+ SYMLINK+=\\\"airspyhf-%k\\\", MODE=\\\"660\\\", GROUP=\\\"plugdev\\\""
+
 
 sha512sum=
 
@@ -60,7 +69,6 @@ prefix=/usr/local/encap/$tarnameTry
 
 tarfile=$tarname.tar.gz
 
-sha512sum=
 
 case "$tag" in
     1.6.8)
@@ -93,7 +101,7 @@ tar --strip-components=1 -xzf ../$tarfile
 mkdir BUILD
 cd BUILD
 
-# could be used to install as root, but we avoided that
+# INSTALL_UDEV_RULES could be used to install as root, but we avoided that
 # and copied it by hand:
 #-DINSTALL_UDEV_RULES=ON\
 
@@ -109,6 +117,7 @@ make install
 
 set +x
 
+
 cat << EOF
 
    SUCCESSFULLY installed $tarname in $prefix
@@ -116,9 +125,7 @@ cat << EOF
 
   You may want to:
 
-   sudo bash -c 'echo "ATTR{idVendor}==\\"$ID_VENDOR_ID\\",\
- ATTR{idProduct}==\\"60a1\\",\
- SYMLINK+=\\"airspy-%k\\", MODE=\\"660\\", GROUP=\\"plugdev\\""\
- > /etc/udev/rules.d/52-airspy.rules'
+  sudo echo "$esc_udev_rule" > /etc/udev/rules.d/52-airspy.rules
+
 
 EOF

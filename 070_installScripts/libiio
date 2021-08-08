@@ -13,9 +13,38 @@
 #
 
 
+# ref: https://plutosdr.org/linux-drivers/
+#
+# Shit dam: There is lots of conflicting information on the web.
+#
+# wget --no-check-certificate https://raw.githubusercontent.com/analogdevicesinc/plutosdr-fw/master/scripts/53-adi-plutosdr-usb.rules
+# wget --no-check-certificate https://raw.githubusercontent.com/analogdevicesinc/m2k-fw/master/scripts/53-adi-m2k-usb.rules
+# sudo cp -i 53-* /etc/udev/rules.d/
+#
+# This is a wild guess I found from bash <tab> completions of the modprobe
+# command:
+#
+#     modprobe iio_hwmon
+#
+#
+# Now re-plugin in the PlutoSDR USB device; if not you will not see it
+# with iio_info -s
+#
+# It seems to create files in /sys/bus (/sys/bus/iio) that are show to be needed by
+# running iio_readdev  which I see by running:
+#
+#    strace iio_readdev -a usb:1.13.5
+#
+# where the "usb:1.13.5" came from running
+#
+#    iio_info -s
+#
+
 set -exo pipefail
 
+
 tag=v0.21
+#tag=v0.19
 
 tarname=libiio-$tag
 
@@ -75,6 +104,7 @@ cd BUILD
 # and copied udev rules file by hand.
 #
 # udev rule filename is: 90-libiio.rules
+# or see above, this is a fucking mess.
 
 cmake .. -G"Unix Makefiles"\
  -DINSTALL_UDEV_RULE=OFF\
@@ -94,7 +124,8 @@ cat << EOF
 
 
   You may want to figure out what file goes in /etc/udev/rules.d/
-  maybe 90-libiio.rules
+
+  See notes in the script file.
 
 
 EOF
