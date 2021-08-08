@@ -1,0 +1,32 @@
+In this directory are bash scripts that install particular versions of
+software projects/packages, mostly from repository sources like
+github.com, fetching the source files with the wget program.
+
+These scripts are intended to be both working notes and runnable scripts.
+If you use them, read them first.  These scripts are not intended to be
+general package installation scripts like, for example, home brew package
+scripts.  Many of these scripts install very popular and mature software
+packages; but we needed more control over them than what an OS package
+manager like debian APT provides.  Some are versions that are too new for
+the current OS package manager to install.  And sometimes we needed to
+install from source (using these scripts) just to get more debugging
+capability.
+
+All the scripts tend to use
+/usr/local/encap/PACKAGE_NAME-TAG_VERSION-TRY_COUNT as an installation
+prefix.  Sym-linking is left to the user to keep PATH and other
+environment variables working.  We an installer of a sym-linking system we
+use in ../020_root_installs/encapInstall_root
+
+So ya, We are installing packages in the non-system /usr/local/ directory
+tree.  That's what /usr/local/ is for.  But that does not mean you could
+not use a users home directory, $HOME/installed/.  I have seen APT deb
+packages break that rule and manage files in /usr/local/, that was
+bad/wrong.
+
+The prefix sym-linking installing "idea" is use in home brew and the Nix
+package manager.  It's a very old idea.
+
+A plus: using /usr/local/ we can install packaged without requiring root
+assess.  Some thought is required to understand that...
+
