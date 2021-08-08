@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# depends on libiio
+
+
+# dependencies:
+# apt install libgtkdatabox-dev libmatio-dev libad9361-dev
+#
+# The additional packages that that depended on may have broken my
+# installation of ???
+
+
+set -exo pipefail
+
+
+tag=v0.13-master
+
+tarname=iio-oscilloscope-$tag
+
+sha512sum=
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://github.com/analogdevicesinc/iio-oscilloscope/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v0.13-master)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+
+mkdir "$builddir"
+
+cd $builddir
+
+tar --strip-components=1 -xzf ../$tarfile
+
+
+export PREFIX=$prefix
+
+# this crap to remove the real ldconfig from the PATH 
+mkdir BUILD_PATH
+cat << EOF > BUILD_PATH/ldconfig
+#!/bin/bash
+echo 'NOT RUNNING ldconfig'
+EOF
+export PATH=$PWD/BUILD_PATH:${PATH}
+
+
+make -j5
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
