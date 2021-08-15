@@ -1,0 +1,58 @@
+diff -ur liquid-dsp-v1.3.1_ORG/makefile.in liquid-dsp-v1.3.1_EDIT/makefile.in
+--- liquid-dsp-v1.3.1_ORG/makefile.in	2017-10-16 20:12:49.000000000 -0400
++++ liquid-dsp-v1.3.1_EDIT/makefile.in	2021-08-15 13:34:36.089140939 -0400
+@@ -65,7 +65,7 @@
+ # flags
+ INCLUDE_CFLAGS	= $(addprefix -I,$(include_dirs))
+ CONFIG_CFLAGS	= @CFLAGS@ @DEBUG_MSG_OPTION@ @ARCH_OPTION@
+-CPPFLAGS	= @CPPFLAGS@ $(INCLUDE_CFLAGS)
++CPPFLAGS	= $(INCLUDE_CFLAGS) @CPPFLAGS@
+ CFLAGS		= $(CONFIG_CFLAGS) -Wall -fPIC
+ LDFLAGS		= @LDFLAGS@
+ LIBS		= @LIBS@
+@@ -79,7 +79,6 @@
+ headers		:= $(headers_install) liquid.internal.h
+ include_headers	:= $(addprefix include/,$(headers))
+ 
+-
+ ## 
+ ## liquid-dsp modules
+ ##
+@@ -1168,7 +1167,9 @@
+ 
+ # linux, et al
+ libliquid.so: libliquid.a
+-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive $(LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -shared -Xlinker -soname=$@ -o $@\
++ -Wl,-rpath=\$$ORIGIN\
++ -Wl,-whole-archive $^ -Wl,-no-whole-archive $(LIBS)
+ 
+ all: libliquid.a $(SHARED_LIB)
+ 
+@@ -1181,17 +1182,22 @@
+ 	@echo "Targets for liquid-dsp makefile:"
+ 	@$(GREP) -E "^## TARGET : " [Mm]akefile | $(SED) 's/## TARGET : /  /'
+ 
++
++liquid-dsp.pc: liquid-dsp.pc.in
++	sed -e 's!@PREFIX@!$(prefix)!g' -e 's!@VERSION@!$(VERSION)!g' liquid-dsp.pc.in > liquid-dsp.pc
++
+ ## 
+ ## TARGET : install   - installs the libraries and header files in the host system
+ ##
+ 
+-install: all
++install: all liquid-dsp.pc
+ 	@echo "installing..."
+ 	@echo ""
+-	mkdir -p $(DESTDIR)$(exec_prefix)$(libdir)
+-	mkdir -p $(DESTDIR)$(prefix)/include/liquid
++	mkdir -p $(DESTDIR)$(exec_prefix)$(libdir)/pkgconfig
++	mkdir -p $(DESTDIR)$(prefix)/include
+ 	install -m 644 -p $(SHARED_LIB) libliquid.a $(DESTDIR)$(exec_prefix)$(libdir)
+-	install -m 644 -p $(addprefix include/,$(headers_install)) $(DESTDIR)$(prefix)/include/liquid
++	install -m 644 -p $(addprefix include/,$(headers_install)) $(DESTDIR)$(prefix)/include
++	install -m 644 -p liquid-dsp.pc $(DESTDIR)$(exec_prefix)$(libdir)/pkgconfig
+ 	@echo ""
+ 	@echo "---------------------------------------------------------"
+ 	@echo "  liquid-dsp was successfully installed.     "

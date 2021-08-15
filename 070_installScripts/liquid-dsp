@@ -1,0 +1,80 @@
+#!/bin/bash
+
+
+# DEPENDENCIES
+#
+# apt install libfec-dev
+
+tag=v1.3.1
+
+
+tarname=liquid-dsp-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/jgaeddert/liquid-dsp/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v1.3.1)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+# We created a patch with a diff from two directories
+# org/ and patched/ where patched/ is a directory with
+# the changes in it.
+#
+# diff -ur org patched > patch.diff
+
+
+patch -p1 < ../liquid-dsp_patch.diff
+cp ../liquid-dsp.pc.in .
+
+./bootstrap.sh
+./configure --prefix=$prefix
+make
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF

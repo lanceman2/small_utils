@@ -1,0 +1,20 @@
+
+prefix=@PREFIX@
+libdir=@PREFIX@/lib
+includedir=@PREFIX@/include
+
+homepage=https://github.com/jgaeddert/liquid-dsp
+
+about=liquid-dsp version: @VERSION@
+
+###################################
+# standard pkg-config options
+###################################
+Name: liquid-dsp
+Description: Digital Signal Processing Library
+Version: @VERSION@
+Homepage: https://github.com/jgaeddert/liquid-dsp
+URL: https://github.com/jgaeddert/liquid-dsp
+Requires:
+Libs: -L${libdir} -lliquid
+Cflags: -I${includedir}

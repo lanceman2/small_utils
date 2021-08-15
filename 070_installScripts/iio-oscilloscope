@@ -69,7 +69,9 @@ tar --strip-components=1 -xzf ../$tarfile
 
 export PREFIX=$prefix
 
-# this crap to remove the real ldconfig from the PATH 
+# this crap to remove the real ldconfig from the PATH:
+# I know too much about linker loader shit to let this
+# shitty makefile fuck with it.
 mkdir BUILD_PATH
 cat << EOF > BUILD_PATH/ldconfig
 #!/bin/bash
