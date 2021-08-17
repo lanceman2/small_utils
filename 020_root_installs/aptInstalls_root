@@ -8,7 +8,12 @@ fi
 set -euxo pipefail
 
 
-# Ports: Debian 9 and Ubuntu 18.04
+# Ports: Debian 9 and Ubuntu 18.04 and 20.04
+
+echo "Do not run this script, it breaks Ubuntu 20.04 system."
+echo -e "\nMaybe: See what this does and run stuff interactively."
+
+exit 0
 
 dpkg --add-architecture i386
 apt update
