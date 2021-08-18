@@ -10,23 +10,11 @@ set -euxo pipefail
 
 # Ports: Debian 9 and Ubuntu 18.04 and 20.04
 
-echo "Do not run this script, it breaks Ubuntu 20.04 system."
-echo -e "\nMaybe: See what this does and run stuff interactively."
-
-exit 0
-
-dpkg --add-architecture i386
-apt update
 
 apt install -y\
  build-essential\
- gcc-multilib\
  libgnutls30\
  csh\
- libstdc++6:i386\
- libgcc1:i386\
- zlib1g:i386\
- libncurses5:i386\
  libgtk2.0-dev\
  libgtk2.0-doc\
  libgtk-3-dev\
@@ -45,4 +33,16 @@ apt install -y\
  locate\
  libgnutls28-dev\
  youtube-dl\
- glibc-doc
+ glibc-doc\
+ htop
+
+# This seems to be able to break ubuntu 20.04
+dpkg --add-architecture i386
+apt update
+
+apt install -y\
+ gcc-multilib\
+ libstdc++6:i386\
+ libgcc1:i386\
+ zlib1g:i386\
+ libncurses5:i386
