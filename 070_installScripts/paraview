@@ -56,7 +56,7 @@ mkdir "$builddir"
 cd "$builddir"
 
 
-# WTF is:      load the “VR Plugin” 
+# WTF is:      load the “VR Plugin” ?
 
 
 # We installed cmake from source and cmake from source sucks,
@@ -101,8 +101,6 @@ cmake\
  -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  ../$tarname
-
-exit
 
 ninja -v -j 40
 ninja -v install
