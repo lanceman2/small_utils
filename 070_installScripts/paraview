@@ -61,11 +61,15 @@ cd "$builddir"
 
 # We installed cmake from source and cmake from source sucks,
 # therefore (the writers of cmake are dumb fucks):
-export CMAKE_ROOT=/usr/share/cmake
+#export CMAKE_ROOT=/usr/share/cmake
+
 export LD_LIBRARY_PATH=/usr/local/lib 
+
 
 # If we have nvidia cards and drivers ???
 #-DPARAVIEW_ENABLE_NVPIPE=ON\
+
+# ./paraview > xxx 2>&1
 
 cmake\
  -GNinja\
@@ -73,15 +77,11 @@ cmake\
  -DPARAVIEW_USE_MPI=ON\
  -DVTK_SMP_IMPLEMENTATION_TYPE=TBB\
  -DCMAKE_BUILD_TYPE=Release\
- -DBUILD_SHARED_LIB=ON\
  -DPARAVIEW_BUILD_QT_GUI=ON\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE\
  -DPARAVIEW_USE_MPI=ON\
- -DPARAVIEW_PLUGIN_VRPlugin_USE_VRPN=ON\
- -DPARAVIEW_PLUGIN_VRPlugin_USE_VRUI=ON\
- -DPARAVIEW_BUILD_PLUGIN_VRPlugin=ON\
  -DPARAVIEW_ENABLE_VISITBRIDGE=ON\
  -DPARAVIEW_ENABLE_NVPIPE=OFF\
  -DPARAVIEW_ENABLE_GDAL=OFF\
@@ -95,15 +95,14 @@ cmake\
  -DPARAVIEW_ENABLE_XDMF3=ON\
  -DPARAVIEW_ENABLE_FFMPEG=OFF\
  -DPARAVIEW_ENABLE_COSMOTOOLS=OFF\
- -DVRPN_INCLUDE_DIR=/usr/local/include\
- -DVRPN_LIBRARY_DIR=/usr/local/lib\
- -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
- -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
+ -DPARAVIEW_BUILD_SHARED_LIBS=ON\
+ -DPARAVIEW_PLUGIN_ENABLE_VRPlugin=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRPN=ON\
+ -DPARAVIEW_PLUGIN_VRPlugin_USE_VRUI=ON\
  ../$tarname
 
-exit
 
-ninja -v -j 40
+ninja -v -j 44
 ninja -v install
 
 cd -
