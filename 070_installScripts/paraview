@@ -56,8 +56,8 @@ mkdir "$builddir"
 cd "$builddir"
 
 
-# WTF is:      load the “VR Plugin” ?
-
+# Some information at https://www.paraview.org/Wiki/Immersive_ParaView
+# is wrong.
 
 # We installed cmake from source and cmake from source sucks,
 # therefore (the writers of cmake are dumb fucks):
@@ -95,12 +95,13 @@ cmake\
  -DPARAVIEW_ENABLE_XDMF3=ON\
  -DPARAVIEW_ENABLE_FFMPEG=OFF\
  -DPARAVIEW_ENABLE_COSMOTOOLS=OFF\
- -DPARAVIEW_USE_VRPN=ON\
  -DVRPN_INCLUDE_DIR=/usr/local/include\
  -DVRPN_LIBRARY_DIR=/usr/local/lib\
  -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DRUNTIME_PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  ../$tarname
+
+exit
 
 ninja -v -j 40
 ninja -v install
