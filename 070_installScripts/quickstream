@@ -7,7 +7,7 @@
 
 tag=master
 
-tarname=node-$tag
+tarname=quickstream-$tag
 
 set -exo pipefail
 
@@ -55,6 +55,16 @@ tar --strip-components=1 -xzf ../$tarfile
 
 
 ./bootstrap
+
+cat << EOF > config.make
+
+PREFIX = $prefix
+CPPFLAGS := -DDEBUG -DSPEW_LEVEL_DEBUG
+CFLAGS := -g -Wall -Werror
+CXXFLAGS := -g -Wall -Werror
+
+EOF
+
 make -j10
 make install
 
