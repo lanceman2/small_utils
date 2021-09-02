@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# kermit is some old good shit.  It's some kind of telnet like thing.
+# kermit is some old shit.  It's some kind of telnet like thing.
 #
 # The source and building it seems kind-of old school.
 #
 #https://www.kermitproject.org/archive.html
-
+#
+# Note: from the download url this is not a "tagged" release.  Do they not
+# know what a hash, and versioning is?
+#
 
 set -ex
 
@@ -37,11 +40,6 @@ tarfile=$tarname.tar.gz
 
 
 case "$tag" in
-    302)
-        sha512sum=2cfc264e5262d29618fdf218fd3407\
-fd9049b16110972cdddb03d114703b7a0ea13c4b0a354f50\
-c2a9f70d4727732fe4d1920b5c656f969bc56c1eb9dc3c43fa
-        ;;
     9.0.305a.02)
          sha512sum=017c742d53fa847b844554ce46708a32\
 bee76af2efb092c3149b92f9ef50e0aa03ce52ffe99fc46ebfb\
