@@ -5,6 +5,12 @@ set -e
 _JUST_PATHS_=yes
 source "$(dirname ${BASH_SOURCE[0]})/grrun"
 
+# Make this work for arguments with spaces:
+while [ -n "$1" ] ; do
+    a+=( "$1" )
+    shift
+done
+
 set -x
 
-exec gnuradio-companion $*
+exec gnuradio-companion "${a[@]}"

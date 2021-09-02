@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# kermit is some old good shit.  It's some kind of telnet like thing.
+#
+# The source and building it seems kind-of old school.
+#
+#https://www.kermitproject.org/archive.html
+
+
+set -ex
+
+tag=9.0.305a.02
+tarname=ckermit-$tag
+
+
+sha512sum=
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://www.kermitproject.org/ftp/kermit/test/tar/x.tar.gz
+
+#This fails to make.
+#url=http://www.columbia.edu/kermit/ftp/archives/cku302.tar.gz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+
+case "$tag" in
+    302)
+        sha512sum=2cfc264e5262d29618fdf218fd3407\
+fd9049b16110972cdddb03d114703b7a0ea13c4b0a354f50\
+c2a9f70d4727732fe4d1920b5c656f969bc56c1eb9dc3c43fa
+        ;;
+    9.0.305a.02)
+         sha512sum=017c742d53fa847b844554ce46708a32\
+bee76af2efb092c3149b92f9ef50e0aa03ce52ffe99fc46ebfb\
+7eeda1f4660b9f936d92c48625eda92369496070dd3a1
+         ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+mkdir "$builddir"
+
+cd $builddir
+
+tar -xzf ../$tarfile
+
+infodir=$prefix/share/doc/share/doc/ckermit
+
+make linux prefix=$prefix INFODIR=$infodir
+mkdir -p $prefix/bin
+mkdir -p $prefix/man
+mkdir -p $infodir
+make install prefix=$prefix INFODIR=$infodir
+
+
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF

@@ -68,9 +68,15 @@ EOF
     exit 1
 fi
 
+# Make this work for arguments with spaces:
+while [ -n "$1" ] ; do
+    a+=( "$1" )
+    shift
+done
 
-if [ -n "$*" ] ; then
+
+if [ -n "${a[0]}" ] ; then
     set -x
-    exec $*
-    exit
+    exec "${a[@]}"
+    exit 1
 fi
