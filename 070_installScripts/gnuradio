@@ -29,7 +29,8 @@
 #
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
- pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six mako
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six mako\
+ PyYAML numpy pygobject pyqt5
 
 # After installing this consider installing gr-grnet gr-specst gr-osmosdr
 
