@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Look in script gnuradio for dependences.
+
+
 set -exo pipefail
 
 
