@@ -28,7 +28,7 @@
 #
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
- pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six
 
 # After installing this consider installing gr-grnet gr-specst gr-osmosdr
 
@@ -132,8 +132,8 @@ cd -
 mkdir BUILD
 cd BUILD
 
-# So that the python3 that we installed can run:
-export LD_LIBRARY_PATH=/usr/local/lib
+# So that the python3 that we installed can run well:
+#export LD_LIBRARY_PATH=/usr/local/lib
 
 cmake .. -G"Unix Makefiles"\
  -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
