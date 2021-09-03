@@ -132,6 +132,8 @@ cd -
 mkdir BUILD
 cd BUILD
 
+# So that the python3 that we installed can run:
+export LD_LIBRARY_PATH=/usr/local/lib
 
 cmake .. -G"Unix Makefiles"\
  -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
@@ -159,7 +161,7 @@ cmake .. -G"Unix Makefiles"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
 
-make VERBOSE=1 -j 11
+make VERBOSE=1 -j $(nproc)
 make install
 
 set +x
