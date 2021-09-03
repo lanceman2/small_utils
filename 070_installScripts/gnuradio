@@ -13,7 +13,8 @@
  sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev\
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
- portaudio19-dev libqwt-qt5-dev librtlsdr-dev
+ portaudio19-dev libqwt-qt5-dev librtlsdr-dev\
+ python2.7
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
@@ -28,7 +29,7 @@
 #
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
- pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six mako
 
 # After installing this consider installing gr-grnet gr-specst gr-osmosdr
 
