@@ -88,7 +88,8 @@ CFLAGS="-g -Wall"\
  --prefix=$prefix\
  --enable-shared\
  --with-ssl=/usr/local/lib
-make -j30
+
+make -j $(nproc)
 make install
 
 cd -

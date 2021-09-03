@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#To get a list of what broken:
+#To get a list of what options there are:
 # cd BUILD && cmake .. -LAH > xxx
 
 ############################ DEPENDENCIES #########################################
@@ -13,7 +13,7 @@
  sphinx-common libsdl2-dev sdlbasic libsdl-console-dev libgsl-dev\
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
- portaudio19-dev libqwt-qt5-dev
+ portaudio19-dev libqwt-qt5-dev librtlsdr-dev
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
@@ -22,9 +22,13 @@
 # you need to do that via an interactive browser.
 
 
+# TODO: This pip3 install command does not pick particular versions
+# of the packages, so this could break everything if there are changes
+# to the packages.
+#
 # pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
- pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools librtlsdr-dev
+ pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools
 
 # After installing this consider installing gr-grnet gr-specst gr-osmosdr
 
