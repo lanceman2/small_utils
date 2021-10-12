@@ -167,6 +167,14 @@ exit
 make VERBOSE=1 -j $(nproc)
 make install
 
+
+# The program gnuradio-companion can find the block grc files that are in
+# installation prefix without us symlinking them.  When we symlink them we
+# get a printed WARNING from gnuradio-companion because it finds its
+# installed blocks twice.
+echo "blocks" > ${prefix}/share/gnuradio/grc/encap.exclude
+
+
 set +x
 
 cat << EOF
