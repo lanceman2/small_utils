@@ -62,7 +62,7 @@ tar --strip-components=1 -xzf ../$tarfile
 
 
 ./bootstrap.sh
-./configure --prefix=$prefix
+./configure --prefix=$prefix --without-nodejs
 make -j $(nproc)
 make install
 
