@@ -61,6 +61,9 @@ cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
 
+# We need it to skip the python 2 and use just python 3.
+export PY_PREFIX=/usr/local
+
 ./bootstrap.sh
 ./configure --prefix=$prefix --without-nodejs
 make -j $(nproc)
