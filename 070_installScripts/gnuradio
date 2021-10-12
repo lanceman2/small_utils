@@ -14,7 +14,7 @@
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
  portaudio19-dev libqwt-qt5-dev librtlsdr-dev\
- python2.7
+ python2.7 thrift-compiler
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
@@ -162,6 +162,7 @@ cmake .. -G"Unix Makefiles"\
  #-DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
+exit
 
 make VERBOSE=1 -j $(nproc)
 make install
