@@ -5,6 +5,10 @@
 
 ############################ DEPENDENCIES #########################################
 
+# We may want the gnuradio ControlPort stuff to work:
+# https://www.gnuradio.org/doc/doxygen/page_ctrlport.html added more
+# prerequisites like thrift and etc below.
+
 # We need to install python3, pybind11, volk (GNUradio > v3.9.1.0), and
 # uhd from scripts in this directory
 
