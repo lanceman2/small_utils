@@ -9,7 +9,7 @@
 # https://www.gnuradio.org/doc/doxygen/page_ctrlport.html added more
 # prerequisites like thrift and etc below.
 
-# We need to install python3, pybind11, volk (GNUradio > v3.9.1.0), and
+# We need to install thrift, python3, pybind11, volk (GNUradio > v3.9.1.0), and
 # uhd from scripts in this directory
 
 # apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev\
@@ -18,7 +18,7 @@
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
  portaudio19-dev libqwt-qt5-dev librtlsdr-dev\
- python2.7 thrift-compiler libthrift-dev
+ python2.7
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.

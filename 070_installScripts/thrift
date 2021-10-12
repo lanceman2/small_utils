@@ -1,0 +1,75 @@
+#!/bin/bash
+
+
+#tag=v0.15.0 # too new for gnuradio 3.8 missing file
+# thrift/concurrency/PlatformThreadFactory.h
+
+tag=0.12.0
+
+tarname=thrift-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+#https://github.com/steve-m/librtlsdr.git
+
+#https://github.com/apache/thrift.git
+#url=http://www.apache.org/dyn/closer.cgi?path=/thrift/$tag/thrift-$tag.tar.gz
+url=https://github.com/apache/thrift/tarball/$tag
+
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v0.15.0)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+./bootstrap.sh
+./configure --prefix=$prefix
+make -j $(nproc)
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
