@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# never got this to work.
+
 #To get a list of what options there are:
 # cd BUILD && cmake .. -LAH > xxx
 
@@ -49,10 +51,10 @@ tarname=gnuradio-$tag
 # volk is pulled into gnuradio 3.9 automatically
 volksha512sum=
 
-#volktarfile=volk-v2.3.0.tar.gz
-#volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
-volktarfile=volk-v2.4.1.xx0.tar.gz
-volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
+volktarfile=volk-v2.3.0.tar.gz
+volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
+#volktarfile=volk-v2.4.1.xx0.tar.gz
+#volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
 
 
 
@@ -141,7 +143,6 @@ cd BUILD
 #export LD_LIBRARY_PATH=/usr/local/lib
 
 cmake .. -G"Unix Makefiles"\
- -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"\
  -DENABLE_PYTHON=ON\
