@@ -8,6 +8,8 @@
 #         mkdir /usr/local/lib/python2.7
 # and
 #         chown lance:lance /usr/local/lib/python2.7
+#         chown lance:lance /usr/local/lib/python3.9
+
 
 #Dependences:
 # apt install bison flex
