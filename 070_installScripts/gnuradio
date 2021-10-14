@@ -49,6 +49,7 @@ tarname=gnuradio-$tag
 # must set this so we can find the py11bind Cmake crap.
 #export pybind11_DIR=/usr/local/lib/python3.9/site-packages/pybind11-2.6.2-py3.9.egg/pybind11/share/cmake/pybind11
 
+
 # volk is pulled into gnuradio 3.9 automatically
 volksha512sum=
 
@@ -94,20 +95,24 @@ esac
 
 function GetVolk() {
 
-    if [ ! -e $volktarfile ] ; then
-        wget --no-check-certificate $volkurl -O $volktarfile
+    if [ ! -e $topdir/$volktarfile ] ; then
+        wget --no-check-certificate $volkurl -O $topdir/$volktarfile
     fi
 
     if [ -n "$volksha512sum" ] ; then
-        echo "$volksha512sum  $volktarfile" | sha512sum -c -
+        echo "$volksha512sum  $topdir/$volktarfile" | sha512sum -c -
     else
         set +x
-        sha512sum $volktarfile
+        sha512sum $topdir/$volktarfile
         set -x
     fi
+
+    mkdir -p volk
+    cd volk
+    tar --strip-components=1 -xzf $topdir/$volktarfile
+    cd -
 }
 
-GetVolk
 
 
 if [ ! -e "$tarfile" ] ; then
@@ -129,10 +134,8 @@ cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
 
-mkdir -p volk
-cd volk
-tar --strip-components=1 -xzf $topdir/$volktarfile
-cd -
+# We can comment this out for version 3.9 and up?
+GetVolk
 
 
 mkdir BUILD

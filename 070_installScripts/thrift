@@ -4,6 +4,11 @@
 #tag=v0.15.0 # too new for gnuradio 3.8 missing file
 # thrift/concurrency/PlatformThreadFactory.h
 
+#We had to run:
+#         mkdir /usr/local/lib/python2.7
+# and
+#         chown lance:lance /usr/local/lib/python2.7
+
 tag=0.12.0 # the nodejs dependencies are too old
 
 #tag=v0.13.0 # does not have PlatformThreadFactory.h
