@@ -4,6 +4,7 @@
 #tag=v0.15.0 # too new for gnuradio 3.8 missing file
 # thrift/concurrency/PlatformThreadFactory.h
 
+# this is a little kludgey
 #We had to run:
 #         mkdir /usr/local/lib/python2.7
 # and
