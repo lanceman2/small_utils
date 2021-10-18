@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# never got this to work.
+
 #To get a list of what options there are:
 # cd BUILD && cmake .. -LAH > xxx
 
@@ -9,7 +11,7 @@
 # https://www.gnuradio.org/doc/doxygen/page_ctrlport.html added more
 # prerequisites like thrift and etc below.
 
-# We need to install thrift, python3, pybind11, volk (GNUradio > v3.9.1.0), and
+# We need to install thrift, and
 # uhd from scripts in this directory
 
 # apt install libcodec2-dev libgsm1-dev libqt5opengl5-dev libcairo2-dev\
@@ -18,7 +20,7 @@
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
  portaudio19-dev libqwt-qt5-dev librtlsdr-dev\
- python2.7
+ python-dev
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
@@ -27,20 +29,16 @@
 # you need to do that via an interactive browser.
 
 
-# TODO: This pip3 install command does not pick particular versions
-# of the packages, so this could break everything if there are changes
-# to the packages.
 #
-# pip3 install bs4 cycler decorator html5lib lxml matplotlib networkx\
+# pip install bs4 cycler decorator html5lib lxml matplotlib networkx\
  pygraphviz pyparsing scipy sip subprocess32 tz zmq qtgui pyyaml pygi\
  pycairo pygobject pyqt5 click click-plugins mako pyqt5-tools six mako\
  PyYAML numpy pygobject pyqt5 thrift
 
 # After installing this consider installing gr-grnet gr-specst gr-osmosdr
 
-#tag=v3.7.14.0
-tag=v3.8.2.0
-#tag=v3.9.1.0
+tag=v3.7.14.0
+
 
 tarname=gnuradio-$tag
 
@@ -53,10 +51,10 @@ tarname=gnuradio-$tag
 # volk is pulled into gnuradio 3.9 automatically
 volksha512sum=
 
-#volktarfile=volk-v2.3.0.tar.gz
-#volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
-volktarfile=volk-v2.4.1.xx0.tar.gz
-volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
+volktarfile=volk-v2.3.0.tar.gz
+volkurl=https://github.com/gnuradio/volk/tarball/v2.3.0
+#volktarfile=volk-v2.4.1.xx0.tar.gz
+#volkurl=https://github.com/gnuradio/volk/tarball/1299d72c396a88fd2679adfd7a919ac00d2cf678
 
 
 
@@ -145,7 +143,6 @@ cd BUILD
 #export LD_LIBRARY_PATH=/usr/local/lib
 
 cmake .. -G"Unix Makefiles"\
- -DPYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
  -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib:/usr/local/lib"\
  -DENABLE_PYTHON=ON\
