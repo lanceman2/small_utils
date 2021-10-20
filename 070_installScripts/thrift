@@ -85,7 +85,7 @@ export PY_PREFIX=/usr/local
  --without-lua\
  --with-python\
  --without-perl\
- --withput-php\
+ --without-php\
  --without-php_extension\
  --without-dart\
  --without-ruby\
