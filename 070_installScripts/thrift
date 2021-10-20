@@ -15,8 +15,6 @@
 #Dependences:
 # apt install bison flex
 
->>>>>>> 2124000692a887f72b88ea5b691d37245f5c7bff
-
 tag=0.12.0 # the nodejs dependencies are too old
 
 #tag=v0.13.0 # does not have PlatformThreadFactory.h
