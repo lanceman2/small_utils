@@ -15,9 +15,12 @@
 #Dependences:
 # apt install bison flex composer libevent-dev
 
+# Trying to make it work with gnuradio version 3.8
 tag=0.12.0 # the nodejs dependencies are too old
 
+
 #tag=v0.13.0 # does not have PlatformThreadFactory.h
+#hence v0.13.0 will not work with gnuradio version 3.8
 
 
 tarname=thrift-$tag
