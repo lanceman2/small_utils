@@ -13,7 +13,7 @@
 
 
 #Dependences:
-# apt install bison flex
+# apt install bison flex composer libevent-dev
 
 tag=0.12.0 # the nodejs dependencies are too old
 
