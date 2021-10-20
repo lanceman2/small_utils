@@ -76,7 +76,27 @@ tar --strip-components=1 -xzf ../$tarfile
 export PY_PREFIX=/usr/local
 
 ./bootstrap.sh
-./configure --prefix=$prefix --without-nodejs
+./configure --prefix=$prefix\
+ --without-csharp\
+ --without-java\
+ --without-erlang\
+ --without-nodejs\
+ --without-nodets\
+ --without-lua\
+ --with-python\
+ --without-perl\
+ --withput-php\
+ --without-php_extension\
+ --without-dart\
+ --without-ruby\
+ --without-haskell\
+ --without-go\
+ --without-rs\
+ --without-cl\
+ --without-haxe\
+ --without-dotnetcore\
+ --without-d
+
 make -j $(nproc)
 make install
 
