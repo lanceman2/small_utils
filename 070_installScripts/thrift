@@ -13,13 +13,14 @@
 
 
 #Dependences:
-# apt install bison flex
+# apt install bison flex composer libevent-dev
 
->>>>>>> 2124000692a887f72b88ea5b691d37245f5c7bff
-
+# Trying to make it work with gnuradio version 3.8
 tag=0.12.0 # the nodejs dependencies are too old
 
+
 #tag=v0.13.0 # does not have PlatformThreadFactory.h
+#hence v0.13.0 will not work with gnuradio version 3.8
 
 
 tarname=thrift-$tag
@@ -78,7 +79,27 @@ tar --strip-components=1 -xzf ../$tarfile
 export PY_PREFIX=/usr/local
 
 ./bootstrap.sh
-./configure --prefix=$prefix --without-nodejs
+./configure --prefix=$prefix\
+ --without-csharp\
+ --without-java\
+ --without-erlang\
+ --without-nodejs\
+ --without-nodets\
+ --without-lua\
+ --with-python\
+ --without-perl\
+ --without-php\
+ --without-php_extension\
+ --without-dart\
+ --without-ruby\
+ --without-haskell\
+ --without-go\
+ --without-rs\
+ --without-cl\
+ --without-haxe\
+ --without-dotnetcore\
+ --without-d
+
 make -j $(nproc)
 make install
 
