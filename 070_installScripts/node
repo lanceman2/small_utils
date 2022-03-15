@@ -3,11 +3,21 @@
 
 # DEPENDENCIES
 #
-# Looks like it requires python2:
+# Looks like it requires python to build it:
 #
 # apt install python
+#
+#    OR
+#
+# for v14.17.5 ew installed python3 from a script here.
 
-tag=v12.18.1
+
+#see also: https://nodejs.org/en/about/releases/
+
+
+#tag=v12.18.1
+tag=v14.17.5
+
 
 tarname=node-$tag
 
@@ -64,7 +74,7 @@ tar --strip-components=1 -xzf ../$tarfile
 
 
 ./configure --prefix=$prefix
-make -j8
+make -j $(nproc)
 make install
 
 cd -

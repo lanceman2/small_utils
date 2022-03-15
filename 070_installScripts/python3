@@ -1,5 +1,22 @@
 #!/bin/bash
 
+#Dependencies:
+# apt install\
+ libbluetooth-dev\
+ libbz2-dev\
+ libdb-dev\
+ libexpat1-dev\
+ libffi-dev\
+ libgdbm-dev\
+ liblzma-dev\
+ libmpdec-dev\
+ libncursesw5-dev\
+ libreadline-dev\
+ libsqlite3-dev\
+ libssl-dev\
+ zlib1g-dev\
+ libbz2-dev
+
 
 if [ ! -e /usr/local/lib/libssl.so ] ; then
     echo "Install openssl first"
