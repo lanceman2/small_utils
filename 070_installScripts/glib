@@ -1,0 +1,73 @@
+#!/bin/bash
+
+
+ta=2.71
+tag=${ta}.2
+name=glib
+tarname=$name-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+
+url=https://download.gnome.org/sources/$name/$ta/${tarname}.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    2.71.2)
+        sha512sum=21b7076c21b9a7c4ff937a\
+58e3b1d05a3d351a74dec3d40674d0e3069d05b5\
+7e072efad5c3b23332bd6d2098bc2960dd2de5d4\
+3757a27346a6bc30a3ffce9cd1
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+
+meson _build --prefix $prefix
+ninja -C _build
+ninja -C _build install
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

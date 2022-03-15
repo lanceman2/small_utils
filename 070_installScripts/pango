@@ -1,0 +1,74 @@
+#!/bin/bash
+
+
+ta=1.50
+tag=${ta}.5
+name=pango
+
+
+tarname=$name-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://download.gnome.org/sources/$name/$ta/${tarname}.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    1.50.5)
+        sha512sum=6e898945ca9682ad113cea8a5702068d\
+6141d39bc51a27093c6c1627c10825005155c73778cb5acab9\
+9551689dd1b47069f7d5ea102db11f00416ddcf747b8c6 
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+
+
+meson _build --prefix $prefix
+ninja -C _build
+ninja -C _build install
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

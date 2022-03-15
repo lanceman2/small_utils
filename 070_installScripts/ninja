@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+tag=v1.10.2
+
+tarname=ninja-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/ninja-build/ninja/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v1.10.2)
+        sha512sum=b2d08968a38d99c012640e9b9bb069\
+cf810a7e3647bd692453f1ddc5b5e63b333ab860b49ffa6d\
+32e2a48dd5e155dbffa11bb541b9241bd7678026591b154528 
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+./configure.py --bootstrap
+cmake -BBUILD -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"
+cmake --build BUILD
+make -C BUILD install
+
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF

@@ -22,6 +22,7 @@ saveFiles=(
  git/quickstream
  git/quickplot
  git/quickscope
+ git/users_crts
  p
  .bashrc
  .vimrc
