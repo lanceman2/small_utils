@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# The access to the source is more restricted than free software projects.
+
+# Dependences:
+# apt install mono clang
+
+#https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Build/BatchFiles/Linux/README.md
+
