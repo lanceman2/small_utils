@@ -1,11 +1,17 @@
 #!/bin/bash
 
-# 2.64.6 seems to be compatible with gobject-introspection-1.71.0
+# In this script we there not interested in using PHP with Apache httpd.
+# We just wanted the PHP program to use like a compiler to take php files
+# and make html files.
 
-ta=2.64
-tag=${ta}.6
-name=glib
-tarname=$name-$tag
+
+# DEPENDENCIES
+#
+#
+
+tag=7.3.28
+
+tarname=php-$tag
 
 set -exo pipefail
 
@@ -19,29 +25,17 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-
-
-url=https://download.gnome.org/sources/$name/$ta/${tarname}.tar.xz
+url=https://www.php.net/distributions/php-$tag.tar.bz2
 
 prefix=/usr/local/encap/$tarnameTry
-tarfile=$tarname.tar.xz
+
+tarfile=$tarname.tar.gz
 
 sha512sum=
 
-
 case "$tag" in
-    2.64.6)
+    7.3.28)
         sha512sum=
-        ;;
-
-    2.70.4)
-        sha512sum=
-        ;;
-    2.71.2)
-        sha512sum=21b7076c21b9a7c4ff937a\
-58e3b1d05a3d351a74dec3d40674d0e3069d05b5\
-7e072efad5c3b23332bd6d2098bc2960dd2de5d4\
-3757a27346a6bc30a3ffce9cd1
         ;;
 esac
 
@@ -59,16 +53,14 @@ else
     set -x
 fi
 
-
 mkdir "$builddir"
 cd "$builddir"
-tar --strip-components=1 -xJf ../$tarfile
+tar --strip-components=1 -xjf ../$tarfile
 
 
-meson _build --prefix $prefix
-ninja -C _build
-ninja -C _build install
-
+./configure --prefix=$prefix
+make -j8
+make install
 
 cd -
 
@@ -79,4 +71,3 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
-

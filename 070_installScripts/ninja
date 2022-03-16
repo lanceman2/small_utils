@@ -54,11 +54,10 @@ tar --strip-components=1 -xzf ../$tarfile
 ./configure.py --bootstrap
 cmake -BBUILD -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"
 cmake --build BUILD
-make -C BUILD install
+mkdir -p $prefix/bin
+cp BUILD/ninja $prefix/bin
 
 
-
-cd -
 
 set +x
 

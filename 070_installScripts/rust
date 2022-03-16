@@ -1,0 +1,183 @@
+#!/bin/bash
+
+
+# DEPENDENCIES
+#
+# Looks like it requires python2 or python3
+#
+# I'm using python3 built and installed from scripts here in.
+
+# trial and error shows we need these binary tarballs to bootscript this
+# thing.  If git tag is changed these will likely change.
+
+set -exo pipefail
+
+
+declare -a tarfiles
+
+date=2021-02-11
+arch=x86_64-unknown-linux-gnu
+dl_url=https://static.rust-lang.org/dist/$date
+dl_tag=1.50.0
+
+tarfiles=(
+ rust-std-${dl_tag}-${arch}.tar.xz  # 0
+ rustc-${dl_tag}-${arch}.tar.xz    # 1
+ cargo-${dl_tag}-${arch}.tar.xz    # 2
+)
+
+
+# Usage: get URL FILE [HASH]
+function get() {
+
+    set +x
+    echo "get $*"
+    set -x
+
+    [ -n "$2" ] || exit 1
+
+    if [ ! -e "$2" ] ; then
+        wget --no-check-certificate $1 -O $2
+    fi
+
+    if [ -n "$3" ] ; then
+        echo "$3  $2" | sha512sum -c -
+    else
+        set +x
+        sha512sum $2
+        set -x
+    fi
+}
+
+
+
+for i in "${!tarfiles[@]}" ; do
+    get "${dl_url}/${tarfiles[$i]}" ${tarfiles[$i]}
+done
+
+
+
+tag=1.51.0
+
+tarname=rust-$tag
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+set +x
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+set -x
+builddir="${tarnameTry}"
+
+url=https://github.com/rust-lang/rust/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    1.51.0)
+        sha512sum=
+        ;;
+esac
+
+get $url $tarfile $sha512sum
+
+set +x
+cat << EOF
+
+-------------------------------------------------------
+-------         DOWNLOADS ARE FINISHED        ---------
+-------------------------------------------------------
+
+EOF
+set -x
+
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+cd -
+mkdir -p $builddir/build/cache/$date
+cp ${tarfiles[@]} $builddir/build/cache/$date/
+cd "$builddir"
+
+topsrcdir="$PWD"
+
+cat > config.toml << EOF
+#
+changelog-seen = 2
+
+[llvm]
+download-ci-llvm = true
+assertions = true
+[build]
+
+#build.extended = true
+
+[install]
+
+# Instead of installing to /usr/local, install to this path instead.
+prefix = "$prefix"
+
+[rust]
+debug-logging = true
+incremental = true
+
+[target.x86_64-unknown-linux-gnu]
+
+[dist]
+
+EOF
+
+
+function mkCargo_toml() {
+
+    [ -z "$1" ] && exit 1
+
+    if [ ! -d $1 ] ; then
+        mkdir -p $1
+    fi
+
+    ln -s $topsrcdir/Cargo.toml $1
+}
+
+
+# make some symlinks to Cargo.toml
+#
+#mkCargo_toml src/tools/rust-installer
+#mkCargo_toml src/tools/cargo
+#mkCargo_toml src/tools/cargo/crates/credential/cargo-credential-1password
+#mkCargo_toml src/tools/cargo/crates/credential/cargo-credential-macos-keychain
+#mkCargo_toml src/tools/cargo/crates/credential/cargo-credential-wincred
+#mkCargo_toml src/tools/rls
+#mkCargo_toml src/tools/rustfmt
+#mkCargo_toml src/tools/miri
+#mkCargo_toml src/tools/miri/cargo-miri
+#mkCargo_toml src/bootstrap
+
+
+./x.py build
+
+#./x.py install
+#./x.py doc
+
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

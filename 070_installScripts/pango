@@ -3,6 +3,23 @@
 
 ta=1.50
 tag=${ta}.5
+
+#ta=1.49
+#tag=${ta}.4
+
+#ta=1.48
+#tag=${ta}.9
+
+#ta=1.47
+#tag=${ta}.0
+
+#ta=1.45
+#tag=${ta}.5
+
+
+
+
+
 name=pango
 
 

@@ -1,10 +1,23 @@
 #!/bin/bash
 
-# 2.64.6 seems to be compatible with gobject-introspection-1.71.0
+#https://docs.gtk.org/gtk4/building.html#dependencies
 
-ta=2.64
-tag=${ta}.6
-name=glib
+# DEPENDENCIES
+#
+# pip3 install meson
+#
+# apt install libgraphene-1.0-dev shared-mime-info libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+#
+# ninja glib gdk-pixbuf pango gobject-introspection libepoxy
+#
+
+
+
+ta=4.6
+tag=${ta}.1
+name=gtk
+
+
 tarname=$name-$tag
 
 set -exo pipefail
@@ -28,20 +41,9 @@ tarfile=$tarname.tar.xz
 
 sha512sum=
 
-
 case "$tag" in
-    2.64.6)
+    4.6.1)
         sha512sum=
-        ;;
-
-    2.70.4)
-        sha512sum=
-        ;;
-    2.71.2)
-        sha512sum=21b7076c21b9a7c4ff937a\
-58e3b1d05a3d351a74dec3d40674d0e3069d05b5\
-7e072efad5c3b23332bd6d2098bc2960dd2de5d4\
-3757a27346a6bc30a3ffce9cd1
         ;;
 esac
 
@@ -65,12 +67,13 @@ cd "$builddir"
 tar --strip-components=1 -xJf ../$tarfile
 
 
+
 meson _build --prefix $prefix
-ninja -C _build
-ninja -C _build install
 
+cd _build
+ninja
+ninja install
 
-cd -
 
 set +x
 
@@ -79,4 +82,3 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
-

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-ta=1.70
+ta=1.71
 tag=${ta}.0
 name=gobject-introspection
 
@@ -19,6 +19,7 @@ while [ -d "${tarnameTry}" ] ; do
     tarnameTry=$tarname-try-$try
 done
 builddir="${tarnameTry}"
+
 
 
 url=https://download.gnome.org/sources/$name/$ta/${tarname}.tar.xz
