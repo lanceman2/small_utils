@@ -17,6 +17,9 @@
  zlib1g-dev\
  libbz2-dev
 
+# From here: openssl
+
+set -ex
 
 if [ ! -e /usr/local/lib/libssl.so ] ; then
     echo "Install openssl first"
