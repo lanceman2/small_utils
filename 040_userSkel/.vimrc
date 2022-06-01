@@ -141,7 +141,7 @@ endif
 
 set textwidth=74
 set autoread
-"set autochdir
+set autochdir
 set backupdir=~/.vim/vim_backup
 set number
 set spell
