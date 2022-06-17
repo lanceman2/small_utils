@@ -103,6 +103,8 @@ tar --strip-components=1 -xJf ../$tarfile
 #
 #  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError('No cipher can be selected.'))': /simple/pip/
 
+export LD_LIBRARY_PATH=/usr/local/lib
+
 CFLAGS="-g -Wall"\
  ./configure\
  --prefix=$prefix\

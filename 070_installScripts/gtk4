@@ -6,7 +6,7 @@
 #
 # pip3 install meson
 #
-# apt install libgraphene-1.0-dev shared-mime-info libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+# apt install libgraphene-1.0-dev shared-mime-info libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libgstreamer-plugins-bad1.0-dev 
 #
 # ninja glib gdk-pixbuf pango gobject-introspection libepoxy
 #
