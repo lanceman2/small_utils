@@ -5,6 +5,8 @@
 
 ############################ DEPENDENCIES #########################################
 
+# before this, consider installing UHD from script uhd.
+
 # We may want the gnuradio ControlPort stuff to work:
 # https://www.gnuradio.org/doc/doxygen/page_ctrlport.html added more
 # prerequisites like thrift and etc below.
@@ -18,7 +20,8 @@
  libyaml-dev doxygen cmake swig libfftw3-dev\
  qtdeclarative5-dev qml-module-qtquick-controls\
  portaudio19-dev libqwt-qt5-dev librtlsdr-dev\
- python2.7
+ python2.7 cmake libboost-all-dev libncurses-dev\
+ libusb-dev swig libfftw3-dev texlive libqwt-qt5-dev libusb-1.0-0-dev
 
 #
 # sudo apt install log4cpp: FAILs installed log4cpp from APT.
@@ -145,6 +148,9 @@ GetVolk
 mkdir BUILD
 cd BUILD
 
+#UHD=ON
+UHD=OFF
+
 # So that the python3 that we installed can run well:
 #export LD_LIBRARY_PATH=/usr/local/lib
 
@@ -159,7 +165,7 @@ cmake .. -G"Unix Makefiles"\
  -DENABLE_GR_UTILS=ON\
  -DENABLE_GR_QTGUI=ON\
  -DENABLE_GR_UTILS=ON\
- -DENABLE_GR_UHD=ON\
+ -DENABLE_GR_UHD=$UHD\
  -DENABLE_GR_ZEROMQ=ON\
  -DENABLE_DEFAULT=ON\
  -DENABLE_DOXYGEN=ON\
