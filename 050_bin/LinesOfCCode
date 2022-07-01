@@ -9,9 +9,6 @@ function print_help() {
     Print the number of lines of C and C++ code in the current directory,
     both counting comments (-w) and excluding comments (default).
 
-    This requires that Jonathan Leffler's program scc be in your PATH as
-    jleffler_scc.  URL https://github.com/jleffler/scc-snapshots/
-
 
    --------------------------- OPTIONS ------------------------------------
 
@@ -30,9 +27,9 @@ EOF
 
 
 
-if ! which jleffler_scc > /dev/null ; then
+if ! which gcc > /dev/null ; then
 
-    echo -e "Error: jleffler_scc is not in your PATH\n"
+    echo -e "Error: gcc is not in your PATH\n"
 
     print_help
 fi
