@@ -180,8 +180,9 @@ cmake .. -G"Unix Makefiles"\
  #-DGNURADIO_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
  #-DGR_RUNTIME_PYTHONPATH="${prefix}/lib/python3/dist-packages/gnuradio:${prefix}/lib/python3/dist-packages/gnuradio/gr:${prefix}/lib/python3/dist-packages/gnuradio/uhd"\
 
-
-make VERBOSE=1 -j $(nproc)
+make VERBOSE=1
+# parallel make fails.
+#make VERBOSE=1 -j $(nproc)
 make install
 
 
