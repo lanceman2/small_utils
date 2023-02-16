@@ -111,6 +111,7 @@ cat >> $cfile << EOF
 #include <elf.h>
 #include <complex.h>
 #include <regex.h>
+#include <stdatomic.h>
 #include <gnutls/gnutls.h>
 EOF
 
