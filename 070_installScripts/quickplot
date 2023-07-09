@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+tag=master
+
+
+tarname=quickplot-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/lanceman2/quickplot/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    masterrrr)
+        sha512sum=b0b5529d88170d77da94ec398667fbfdc\
+2d9b2e0ed5343ed5501f7e09673772c41b65f1d1099fbd06979\
+71832022f9ce88920bb07a5c2a3bfa3f92dc0ea6c0d1
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+
+./bootstrap
+./configure --prefix=$prefix --enable-developer
+make
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
