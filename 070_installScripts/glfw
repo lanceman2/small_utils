@@ -54,7 +54,8 @@ cd BUILD
 
 cmake -S .. -B .\
  -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
- -D GLFW_USE_WAYLAND=ON
+ -D GLFW_USE_WAYLAND=ON\
+ -D BUILD_SHARED_LIBS=ON
 make
 make install
 
