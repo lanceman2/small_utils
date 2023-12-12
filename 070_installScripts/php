@@ -1,15 +1,25 @@
 #!/bin/bash
 
-# In this script we there not interested in using PHP with Apache httpd.
+# In this script we are not interested in using PHP with Apache httpd.
 # We just wanted the PHP program to use like a compiler to take php files
-# and make html files.
+# and make HTML files.
+#
+# Hense: this makes a very stripped down installation of PHP.
+
+# Note: It's nice that the PHP package builder/installer does a lot of
+# checks in it's configure script, so we don't need to waste more time
+# waiting for it to fail in running compile commands that take a long
+# time to run.
 
 
 # DEPENDENCIES
 #
 #
 
-tag=7.3.28
+#older tag that worked a time in the past on an old ubuntu version:
+#tag=7.3.28
+
+tag=8.1.26
 
 tarname=php-$tag
 
@@ -37,6 +47,11 @@ case "$tag" in
     7.3.28)
         sha512sum=
         ;;
+    8.1.26)
+        sha512sum=86d273c444793259762df18544e4ae91403a2\
+2318a32fa93c6935ff82b76bcba6e7b5a3c63424b90c5a4c7f82203\
+f3ad02715f32d74b6d553b21f319e7eae897
+
 esac
 
 
@@ -57,8 +72,16 @@ mkdir "$builddir"
 cd "$builddir"
 tar --strip-components=1 -xjf ../$tarfile
 
-
-./configure --prefix=$prefix
+./configure --prefix=$prefix\
+ --without-libxml\
+ --disable-simplexml\
+ --disable-xml\
+ --disable-xmlreader\
+ --disable-xmlwriter\
+ --disable-simplexml\
+ --without-sqlite3\
+ --without-pdo-sqlite\
+ --disable-dom
 make -j8
 make install
 
