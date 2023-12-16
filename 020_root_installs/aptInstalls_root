@@ -34,7 +34,8 @@ apt install -y\
  libgnutls28-dev\
  youtube-dl\
  glibc-doc\
- htop
+ htop\
+ net-tools
 
 
 dpkg --add-architecture i386
