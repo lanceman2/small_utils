@@ -36,7 +36,8 @@ apt install -y\
  glibc-doc\
  htop\
  net-tools\
- wget
+ wget\
+ rsync
 
 
 dpkg --add-architecture i386
