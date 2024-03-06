@@ -1,0 +1,74 @@
+#!/bin/bash
+
+#ref: https://doc.qt.io/qt-6/build-sources.html
+
+majorTag=6.6
+tag=${majorTag}.2
+
+tarname=qt6-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url="https://download.qt.io/official_releases/qt/$majorTag/$tag/single/qt-everywhere-src-$tag.tar.xz"
+
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    6.6.2)
+        sha512sum=03e393d49fae1aef28870d302f416\
+2b32879158e757a416c699e67cd0fa5cdd099cd1ef2c30e\
+dc1f85b9561c68050af23855cda86384faf41b25dcf3cce4920d
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 --xz -xf ../$tarfile
+mkdir BUILD
+cd BUILD
+
+prefix=/usr/local/encap/$tarnameTry
+
+
+../configure --prefix=$prefix -debug --enable-static
+cmake --build .. --parallel
+cmake --install ..
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
