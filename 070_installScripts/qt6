@@ -14,7 +14,10 @@
 # including the running of init-repository which downloads most of the
 # code.
 
-tag=v6.6.2
+tag=v6.6.1
+
+#tag=v6.6.2
+
 
 gitSrcDir=qt6-$tag-git_source
 
@@ -23,7 +26,7 @@ set -exo pipefail
 cd "$(dirname ${BASH_SOURCE[0]})"
 
 function FAIL() {
-    rm -rf $gitSrcDir
+    echo "Checking out Qt source $tag code FAILED"
     exit 1
 }
 
@@ -31,16 +34,17 @@ function FAIL() {
 if [ ! -d $gitSrcDir ] ; then
     git clone git://code.qt.io/qt/qt5.git $gitSrcDir || FAIL
     $(cd $gitSrcDir && ./init-repository) || FAIL
+    $(cd $gitSrcDir && git checkout $tag) || FAIL
 fi
 
 # At this point the directory $gitSrcDir exists
 
 
 try=0
-buildDir=qt6_build-$try
-if [ -d $buildDir ] ; then
+builddir=qt6_build-try$try
+if [ -d $builddir ] ; then
     let try=$try+1
-    buildDir=qt6_build-$try
+    builddir=qt6_build-try$try
 fi
 
 # We'll assume that building in $buildDir does not change files in $gitSrcDir
@@ -50,9 +54,10 @@ cd "$builddir"
 
 prefix=/usr/local/encap/$tarnameTry
 
+#../$gitSrcDir/configure --prefix=$prefix -debug
 ../$gitSrcDir/configure --prefix=$prefix -debug --enable-static
-cmake --build ../$gitSrcDir --parallel 9
-cmake --install ../$gitSrcDir
+cmake --build . --parallel 9
+cmake --install .
 
 cd -
 
