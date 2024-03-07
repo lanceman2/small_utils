@@ -1,66 +1,58 @@
 #!/bin/bash
 
 #ref: https://doc.qt.io/qt-6/build-sources.html
+# Building from a tarball like
+# https://download.qt.io/official_releases/qt/6.6/6.6.2/single/qt-everywhere-6.6.2.tar.xz
+# appears to only contain some of the qt libraries, but not all that we
+# need.  So we are trying to build Qt and all it's needed libraries from
+# a git repo.  It may be that qt-everywhere-6.6.2.tar.xz contains all of
+# the source we need, but it's currently broken (we failed to build with
+# it).
+#
+# Looks like downloading Qt6 sources from the git server is faster than
+# downloading it the tarball from https://download.qt.io/ even when
+# including the running of init-repository which downloads most of the
+# code.
 
-majorTag=6.6
-tag=${majorTag}.2
+tag=v6.6.2
 
-tarname=qt6-$tag
+gitSrcDir=qt6-$tag-git_source
 
 set -exo pipefail
 
 cd "$(dirname ${BASH_SOURCE[0]})"
 
+function FAIL() {
+    rm -rf $gitSrcDir
+    exit 1
+}
+
+
+if [ ! -d $gitSrcDir ] ; then
+    git clone git://code.qt.io/qt/qt5.git $gitSrcDir || FAIL
+    $(cd $gitSrcDir && ./init-repository) || FAIL
+fi
+
+# At this point the directory $gitSrcDir exists
+
 
 try=0
-tarnameTry=$tarname-try-$try
-while [ -d "${tarnameTry}" ] ; do
+buildDir=qt6_build-$try
+if [ -d $buildDir ] ; then
     let try=$try+1
-    tarnameTry=$tarname-try-$try
-done
-builddir="${tarnameTry}"
-
-
-url="https://download.qt.io/official_releases/qt/$majorTag/$tag/single/qt-everywhere-src-$tag.tar.xz"
-
-tarfile=$tarname.tar.xz
-
-sha512sum=
-
-case "$tag" in
-    6.6.2)
-        sha512sum=03e393d49fae1aef28870d302f416\
-2b32879158e757a416c699e67cd0fa5cdd099cd1ef2c30e\
-dc1f85b9561c68050af23855cda86384faf41b25dcf3cce4920d
-        ;;
-esac
-
-
-if [ ! -e "$tarfile" ] ; then
-    wget --no-check-certificate $url -O $tarfile
+    buildDir=qt6_build-$try
 fi
 
-
-if [ -n "$sha512sum" ] ; then
-    echo "$sha512sum  $tarfile" | sha512sum -c -
-else
-    set +x
-    sha512sum $tarfile
-    set -x
-fi
+# We'll assume that building in $buildDir does not change files in $gitSrcDir
 
 mkdir "$builddir"
 cd "$builddir"
-tar --strip-components=1 --xz -xf ../$tarfile
-mkdir BUILD
-cd BUILD
 
 prefix=/usr/local/encap/$tarnameTry
 
-
-../configure --prefix=$prefix -debug --enable-static
-cmake --build .. --parallel
-cmake --install ..
+../$gitSrcDir/configure --prefix=$prefix -debug --enable-static
+cmake --build ../$gitSrcDir --parallel 9
+cmake --install ../$gitSrcDir
 
 cd -
 
@@ -68,7 +60,7 @@ set +x
 
 cat << EOF
 
-   SUCCESSFULLY installed $tarname in $prefix
+   SUCCESSFULLY installed $prefix
 
 EOF
 
