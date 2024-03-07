@@ -42,20 +42,20 @@ fi
 
 try=0
 builddir=qt6_build-try$try
-if [ -d $builddir ] ; then
+while [ -d $builddir ] ; do
     let try=$try+1
     builddir=qt6_build-try$try
-fi
+done
 
 # We'll assume that building in $buildDir does not change files in $gitSrcDir
 
 mkdir "$builddir"
 cd "$builddir"
 
-prefix=/usr/local/encap/$tarnameTry
+prefix=/usr/local/encap/qt6-$tag
 
-#../$gitSrcDir/configure --prefix=$prefix -debug
-../$gitSrcDir/configure --prefix=$prefix -debug --enable-static
+#../$gitSrcDir/configure --prefix=$prefix -debug -static
+../$gitSrcDir/configure --prefix=$prefix -debug -static
 cmake --build . --parallel 9
 cmake --install .
 
