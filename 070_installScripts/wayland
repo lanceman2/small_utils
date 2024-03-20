@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# ref: https://www.linuxfromscratch.org/blfs/view/svn/general/wayland.html
 
 tag=1.22.0
 
