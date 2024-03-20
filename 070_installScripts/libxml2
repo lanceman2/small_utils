@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#ref: https://www.linuxfromscratch.org/blfs/view/svn/general/libxml2.html
+
+tag=2.12.6
+
+tarname=libxml2-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://download.gnome.org/sources/libxml2/2.12/libxml2-$tag.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    2.12.6)
+        sha512sum=19d6901c0f189813e8bd20ffdfb\
+b29d8545ca30154d1f3cc82624d64e4db3cfbe8eef7e8\
+ccc1e195289f1bf94bb50fefcf11a95badb0ddeb845b4e4ea5a819ac
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+./configure\
+ --prefix=$prefix\
+ --sysconfdir=$prefix/etc\
+ --disable-static\
+ --with-history\
+ --with-icu\
+ PYTHON=/usr/bin/python3\
+ --docdir=$prefix/share/doc/libxml2-2.12.6
+
+make
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
