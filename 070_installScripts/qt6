@@ -54,8 +54,8 @@ cd "$builddir"
 
 prefix=/usr/local/encap/qt6-$tag
 
-#../$gitSrcDir/configure --prefix=$prefix -debug -static
-../$gitSrcDir/configure --prefix=$prefix -debug -static
+#../$gitSrcDir/configure --prefix=$prefix -debug -static # fails
+../$gitSrcDir/configure --prefix=$prefix -debug
 cmake --build . --parallel 9
 cmake --install .
 

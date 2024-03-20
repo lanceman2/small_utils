@@ -1,0 +1,74 @@
+#!/bin/bash
+
+
+tag=1.22.0
+
+tarname=wayland-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+
+url=https://gitlab.freedesktop.org/wayland/wayland/-/releases/$tag/downloads/wayland-$tag.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.xz
+
+sha512sum=
+
+case "$tag" in
+    1.22.0)
+        sha512sum=fb1974efc8433e97254eb83fe2897\
+4198f2b4d8246418eb3d34ce657055461e0c97bc06dd52e\
+5066ae91bbe05bac611dc49a0937ba226ac6388d5a47241efb12
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+mkdir BUILD
+cd BUILD
+
+meson setup ..\
+ --prefix=$prefix\
+ --buildtype=debug\
+ -Ddocumentation=true
+ninja
+ninja install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
