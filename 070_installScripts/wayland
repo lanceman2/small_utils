@@ -56,10 +56,17 @@ tar --strip-components=1 -xJf ../$tarfile
 mkdir BUILD
 cd BUILD
 
+# Seems we need to stop it from putting the libdir
+# at $prefix/lib/x86_64-linux-gnu/
 meson setup ..\
  --prefix=$prefix\
+ --libdir=$prefix/lib\
+ --includedir=$prefix/include\
+ --libexecdir=$prefix/lib\
+ --bindir=$prefix/bin\
  --buildtype=debug\
  -Ddocumentation=true
+
 ninja
 ninja install
 
