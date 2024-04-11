@@ -14,7 +14,9 @@
 # including the running of init-repository which downloads most of the
 # code.
 
+# Looks like we have a git tag and a git branch that that tag is in:
 tag=v6.7.0
+swtag=6.7
 
 #tag=v6.6.2
 
@@ -26,6 +28,7 @@ set -exo pipefail
 cd "$(dirname ${BASH_SOURCE[0]})"
 
 function FAIL() {
+    set +x
     echo "Checking out Qt source $tag code FAILED"
     exit 1
 }
@@ -34,8 +37,10 @@ function FAIL() {
 if [ ! -d $gitSrcDir ] ; then
     git clone git://code.qt.io/qt/qt5.git $gitSrcDir || FAIL
     $(cd $gitSrcDir && ./init-repository) || FAIL
+    # This command I do not understand:
+    $(cd $gitSrcDir && git switch $swtag) || FAIL
     $(cd $gitSrcDir && git checkout $tag) || FAIL
-fi
+ffi
 
 # At this point the directory $gitSrcDir exists
 
