@@ -40,7 +40,7 @@ if [ ! -d $gitSrcDir ] ; then
     # This command I do not understand:
     $(cd $gitSrcDir && git switch $swtag) || FAIL
     $(cd $gitSrcDir && git checkout $tag) || FAIL
-ffi
+fi
 
 # At this point the directory $gitSrcDir exists
 
