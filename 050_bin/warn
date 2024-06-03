@@ -50,7 +50,8 @@ date="$(date '+    %a   %d %b   %I:%M:%S %p')"
 if [ "$1" = "_BATCH__" ]
 then
     shift
-    export DISPLAY=:0.0
+    # Add a way to find a good DISPLAY
+    export DISPLAY=:1.0
     echo -e "$@ \n\n   Current Time: $date" |\
  xmessage -bg blue -fg white -geometry\
  1920x1005+0+24 -file - &
