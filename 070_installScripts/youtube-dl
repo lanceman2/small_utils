@@ -1,0 +1,76 @@
+#!/bin/bash
+
+
+# https://github.com/ytdl-org/ytdl-nightly/releases/download/2024.07.11/youtube-dl-2024.07.11.tar.gz
+
+tag=2024.07.11
+name=youtube-dl
+
+tarname=${name}-${tag}
+tarfile=${tarname}.tar.gz
+
+url=https://github.com/ytdl-org/ytdl-nightly/releases/download/$tag/${tarfile}
+
+set -ex
+
+# Go to the directory there this script is.
+cd $(dirname ${BASH_SOURCE[0]})
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+prefix=/usr/local/encap/$tarnameTry
+
+# GetFile FILENAME URL [SHA512SUM]
+# $0      $1       $2  $3
+function GetFile() {
+
+    [ -n "$2" ] || exit 1
+
+    if [ ! -e "$1" ] ; then
+        wget --no-check-certificate "$2" -O "$1"
+    fi
+
+    if [ -n "$3" ] ; then
+        # We wanted a particular file, so we check its' sha512 sum.
+        echo "$3  $1" | sha512sum -c
+    else
+        sha512sum "$1"
+    fi
+}
+
+sha512sum=
+
+case "$tag" in
+    2024.07.11)
+        sha512sum=\
+aa9327f1b11c813e3412f402494335347dc1e51380e0cd934062ebca00\
+dcb5f4e67d23d214355ce40d73deb5c55cc3e76e84514d386d188d617c\
+c422a3a8cc24
+    ;;
+esac
+
+
+# GetFile FILENAME URL [SHA512SUM]
+
+GetFile ${tarname}.tar.gz $url $sha512sum
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+PREFIX=$prefix make install
+
+
+cd -
+set +x
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
