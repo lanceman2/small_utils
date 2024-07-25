@@ -5,7 +5,8 @@
 # requires: ./libxml2
 # apt install meson xmlto xsltproc
 
-tag=1.22.0
+#tag=1.22.0
+tag=1.23.0
 
 tarname=wayland-$tag
 
