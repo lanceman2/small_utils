@@ -1,0 +1,85 @@
+#!/bin/bash
+
+tag=1.18.2
+
+tarname=cairo-$tag
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+tarfile=${tarname}.tar.xz
+
+url=https://cairographics.org/releases/${tarfile}
+
+prefix=/usr/local/encap/$tarnameTry
+
+sha512sum=
+
+case "$tag" in
+    1.18.2)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xJf ../$tarfile
+
+mkdir BUILD
+cd BUILD
+
+# So that my python3 can run meson
+export LD_LIBRARY_PATH=/usr/local/lib
+
+meson setup ..\
+ --prefix=$prefix\
+ --libdir=$prefix/lib\
+ --includedir=$prefix/include\
+ --libexecdir=$prefix/lib\
+ --bindir=$prefix/bin\
+ --buildtype=debug\
+ -Dxlib=disabled\
+ -Dxcb=disabled\
+ -Dxlib-xcb=disabled\
+ -Dgtk2-utils=disabled\
+ -Dglib=disabled\
+ -Dtests=disabled
+
+
+
+ninja
+#ninja install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

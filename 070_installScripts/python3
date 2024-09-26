@@ -9,13 +9,17 @@
  libffi-dev\
  libgdbm-dev\
  liblzma-dev\
- libmpdec-dev\
  libncursesw5-dev\
  libreadline-dev\
  libsqlite3-dev\
  libssl-dev\
  zlib1g-dev\
- libbz2-dev
+ libbz2-dev\
+ libmpd-dev
+
+# ??? libmpdec-dev
+
+
 
 # From here: openssl
 
@@ -27,7 +31,8 @@ if [ ! -e /usr/local/lib/libssl.so ] ; then
 fi
 
 # Find a python release that works:
-tag=3.9.1
+tag=3.12.6
+#tag=3.9.1
 #tag=3.8.3
 #tag=3.8.1
 #tag=3.7.6
