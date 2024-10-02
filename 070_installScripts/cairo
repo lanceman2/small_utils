@@ -71,7 +71,7 @@ meson setup ..\
 
 
 ninja
-#ninja install
+ninja install
 
 cd -
 

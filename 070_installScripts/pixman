@@ -57,7 +57,10 @@ meson setup ..\
  --includedir=$prefix/include\
  --libexecdir=$prefix/lib\
  --bindir=$prefix/bin\
- --buildtype=debug
+ --buildtype=debug\
+ -Dgtk=disabled\
+ -Dtests=disabled\
+ -Ddemos=disabled
 
 ninja
 ninja install
