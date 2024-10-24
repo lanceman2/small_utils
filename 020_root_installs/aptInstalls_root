@@ -37,7 +37,8 @@ apt install -y\
  net-tools\
  wget\
  rsync\
- bash-completion
+ bash-completion\
+ fonts-freefont-otf
 
 
 dpkg --add-architecture i386
