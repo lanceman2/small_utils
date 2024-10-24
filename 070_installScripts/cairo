@@ -53,6 +53,9 @@ cd BUILD
 
 # So that my python3 can run meson
 export LD_LIBRARY_PATH=/usr/local/lib
+export LIBRARY_PATH=/usr/local/lib
+
+#export LD_FLAGS="-Wl,-rpath,/usr/local/lib"
 
 meson setup ..\
  --prefix=$prefix\
