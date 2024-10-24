@@ -48,6 +48,8 @@ mkdir "$builddir"
 cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
 
+patch -p1 < ../pixman_destructor_0.patch
+
 mkdir BUILD
 cd BUILD
 

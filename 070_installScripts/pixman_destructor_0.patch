@@ -1,0 +1,49 @@
+diff --git a/meson.build b/meson.build
+index 3b56f4f..8ca8796 100644
+--- a/meson.build
++++ b/meson.build
+@@ -519,6 +519,15 @@ if cc.links('''
+   config.set('TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR', 1)
+ endif
+ 
++if cc.links('''
++    static int x = 1;
++    static void __attribute__((destructor)) destructor_function () { x = 0; }
++    int main (void) { return x; }
++    ''',
++    name : '__attribute__((destructor))')
++  config.set('TOOLCHAIN_SUPPORTS_ATTRIBUTE_DESTRUCTOR', 1)
++endif
++
+ if cc.links(
+     ' __float128 a = 1.0Q, b = 2.0Q; int main (void) { return a + b; }',
+     name : 'Has float128 support')
+diff --git a/pixman/pixman.c b/pixman/pixman.c
+index 82ec236..936680c 100644
+--- a/pixman/pixman.c
++++ b/pixman/pixman.c
+@@ -40,6 +40,24 @@ pixman_constructor (void)
+ }
+ #endif
+ 
++#ifdef TOOLCHAIN_SUPPORTS_ATTRIBUTE_DESTRUCTOR
++// This will work even if there is no constructor.
++static void __attribute__((destructor))
++pixman_destructor (void)
++{
++    pixman_implementation_t *d;
++
++    // Free all implementations that are in the list, if there are any:
++    for(d = global_implementation; d;)
++    {
++        pixman_implementation_t *level;
++        level = d; // save this one to free
++        d = d->fallback; // go to next one if there is one
++        free (level); // free the one before
++    }
++}
++#endif
++
+ typedef struct operator_info_t operator_info_t;
+ 
+ struct operator_info_t
