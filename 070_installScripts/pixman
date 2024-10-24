@@ -51,6 +51,8 @@ tar --strip-components=1 -xzf ../$tarfile
 mkdir BUILD
 cd BUILD
 
+export LD_LIBRARY_PATH=/usr/local/lib
+
 meson setup ..\
  --prefix=$prefix\
  --libdir=$prefix/lib\
