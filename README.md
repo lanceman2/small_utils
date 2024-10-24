@@ -28,6 +28,3 @@ On Debian GNU/Linux 8.6 (jessie) and Debian 9, Ubuntu 18.04
 
   - **070_installScripts/** scripts that install different software
     packages.
-
-  - **200_mortgage_payment_schedule** C program that prints a mortgage
-    payment schedule
