@@ -39,7 +39,9 @@ apt install -y\
  rsync\
  bash-completion\
  fonts-freefont-otf\
- libtree
+ libtree\
+ gdb\
+ cmake
 
 
 dpkg --add-architecture i386
