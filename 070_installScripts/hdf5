@@ -1,25 +1,9 @@
 #!/bin/bash
 
-#https://docs.gtk.org/gtk4/building.html#dependencies
 
-# DEPENDENCIES
-#
-# pip3 install meson
-#
-#
-# apt install libgraphene-1.0-dev shared-mime-info libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev flex bison
-#
-# ninja glib gdk-pixbuf pango gobject-introspection libepoxy
-#
+tag=hdf5_1.14.5
 
-export LD_LIBRARY_PATH=/urs/local/lib
-
-ta=4.17
-tag=${ta}.0
-name=gtk
-
-
-tarname=$name-$tag
+tarname=hdf5-$tag
 
 set -exo pipefail
 
@@ -34,16 +18,16 @@ done
 builddir="${tarnameTry}"
 
 
-
-url=https://download.gnome.org/sources/$name/$ta/${tarname}.tar.xz
-
+url=https://github.com/HDFGroup/hdf5/tarball/$tag
 prefix=/usr/local/encap/$tarnameTry
-tarfile=$tarname.tar.xz
+
+tarfile=$tarname.tar.gz
 
 sha512sum=
 
+
 case "$tag" in
-    4.6.1)
+    hdf5_1.14.5)
         sha512sum=
         ;;
 esac
@@ -62,20 +46,23 @@ else
     set -x
 fi
 
-
 mkdir "$builddir"
 cd "$builddir"
-tar --strip-components=1 -xJf ../$tarfile
 
+tar --strip-components=1 -xzf ../$tarfile
 
 mkdir BUILD
 cd BUILD
 
-meson setup ..  --prefix $prefix
+cmake .. -G"Unix Makefiles"\
+ -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"\
+ -DCMAKE_INSTALL_RPATH:PATH="${prefix}/lib"\
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE
 
-ninja
-ninja install
 
+make VERBOSE=1 -j $(nproc)
+make install
 
 set +x
 

@@ -41,7 +41,9 @@ apt install -y\
  fonts-freefont-otf\
  libtree\
  gdb\
- cmake
+ cmake\
+ libgbm-dev\
+ libdecor-0-dev
 
 
 dpkg --add-architecture i386
