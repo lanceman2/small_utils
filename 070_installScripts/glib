@@ -2,8 +2,8 @@
 
 # 2.64.6 seems to be compatible with gobject-introspection-1.71.0
 
-ta=2.64
-tag=${ta}.6
+ta=2.83
+tag=${ta}.2
 name=glib
 tarname=$name-$tag
 
@@ -30,8 +30,11 @@ sha512sum=
 
 
 case "$tag" in
-    2.64.6)
-        sha512sum=
+    2.83.2)
+        sha512sum=1686ef719122d2b3e8bcc569\
+ba1e125cde51fbe645811e1eb7ddd49e300ff834ee\
+d712bb619bba13629f23ad5f801fdc2d37e3103b51\
+50ad3cb7ff9d1168d902
         ;;
 
     2.70.4)
