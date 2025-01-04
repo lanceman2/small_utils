@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# depends:
+#   apt install meson ninja-build
+#
+# We got a patch accepted to add a destructor the frees memory
+# allocated in the constructor:
+# https://gitlab.freedesktop.org/pixman/pixman/-/commit/126d61e796fde564b3a9746031cd188c8a6ecf95
+# changing to a newer tag version may remove the need for the
+# patch that is applied below.
+
 tag=0.43.4
 
 tarname=pixman-$tag
