@@ -31,7 +31,8 @@ if [ ! -e /usr/local/lib/libssl.so ] ; then
 fi
 
 # Find a python release that works:
-tag=3.12.6
+tag=3.13.1
+#tag=3.12.6
 #tag=3.9.1
 #tag=3.8.3
 #tag=3.8.1
