@@ -1,0 +1,29 @@
+diff --git a/src/cairo-ft-font.c b/src/cairo-ft-font.c
+index b5d08ee1b..f487f1a2a 100644
+--- a/src/cairo-ft-font.c
++++ b/src/cairo-ft-font.c
+@@ -380,6 +380,10 @@ _cairo_ft_unscaled_font_map_destroy (void)
+ 	_cairo_hash_table_destroy (font_map->hash_table);
+ 
+ 	free (font_map);
++
++#if CAIRO_HAS_FC_FONT
++        FcFini ();
++#endif
+     }
+ }
+ 
+@@ -3950,8 +3954,13 @@ _cairo_ft_font_face_destroy (void *abstract_face)
+ #if CAIRO_HAS_FC_FONT
+     if (font_face->pattern) {
+ 	FcPatternDestroy (font_face->pattern);
++        font_face->pattern = NULL;
+ 	cairo_font_face_destroy (font_face->resolved_font_face);
+     }
++    if (font_face->resolved_config) {
++        FcConfigDestroy (font_face->resolved_config);
++        font_face->resolved_config = NULL;
++    }
+ #endif
+ 
+     return TRUE;

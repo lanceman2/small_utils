@@ -16,9 +16,10 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-tarfile=${tarname}.tar.xz
 
-url=https://cairographics.org/releases/${tarfile}
+tarfile=${tarname}.tar.gz
+
+url=https://gitlab.freedesktop.org/cairo/cairo/-/archive/$tag/$tarfile
 
 prefix=/usr/local/encap/$tarnameTry
 
@@ -46,7 +47,9 @@ fi
 
 mkdir "$builddir"
 cd "$builddir"
-tar --strip-components=1 -xJf ../$tarfile
+tar --strip-components=1 -xzf ../$tarfile
+
+patch -p1 < ../cairo_FC_MemoryLeak.patch
 
 mkdir BUILD
 cd BUILD
@@ -70,8 +73,6 @@ meson setup ..\
  -Dgtk2-utils=disabled\
  -Dglib=disabled\
  -Dtests=disabled
-
-
 
 ninja
 ninja install
