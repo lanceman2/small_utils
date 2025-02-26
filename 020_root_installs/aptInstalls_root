@@ -44,7 +44,8 @@ apt install -y\
  cmake\
  libgbm-dev\
  libdecor-0-dev\
- libxml2-dev
+ libxml2-dev\
+ cscope
 
 
 dpkg --add-architecture i386
