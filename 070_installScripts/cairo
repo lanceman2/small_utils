@@ -86,4 +86,3 @@ cat << EOF
    SUCCESSFULLY installed $tarname in $prefix
 
 EOF
-
