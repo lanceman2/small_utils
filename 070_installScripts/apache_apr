@@ -1,8 +1,8 @@
 #!/bin/bash
 
-tag=2.4.66
+tag=1.7.6
 
-name=httpd
+name=apr
 tarname=${name}-$tag
 
 set -exo pipefail
@@ -18,11 +18,11 @@ done
 builddir="${tarnameTry}"
 
 
-tarfile=$tarname.tar.bz2
-url=https://dlcdn.apache.org/${name}/${tarfile}
+url=https://dlcdn.apache.org/${name}/${tarname}.tar.bz2
 
 prefix=/usr/local/encap/$tarnameTry
 
+tarfile=$tarname.tar.gz
 
 sha512sum=
 
@@ -51,9 +51,7 @@ cd "$builddir"
 tar --strip-components=1 -xjf ../$tarfile
 
 
-./configure --prefix="${prefix}"\
- --with-apr=/usr/local\
- --with-apr-util=/usr/local
+./configure --prefix="${prefix}"
 make
 make install
 

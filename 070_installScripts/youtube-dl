@@ -3,13 +3,15 @@
 
 # https://github.com/ytdl-org/ytdl-nightly/releases/download/2024.07.11/youtube-dl-2024.07.11.tar.gz
 
-tag=2024.07.11
+#tag=2024.07.11
+tag=2025.05.05
 name=youtube-dl
 
 tarname=${name}-${tag}
 tarfile=${tarname}.tar.gz
 
 url=https://github.com/ytdl-org/ytdl-nightly/releases/download/$tag/${tarfile}
+
 
 set -ex
 
@@ -63,7 +65,11 @@ GetFile ${tarname}.tar.gz $url $sha512sum
 mkdir "$builddir"
 cd "$builddir"
 tar --strip-components=1 -xzf ../$tarfile
-PREFIX=$prefix make install
+
+# They fucked up the file time stamps in the tar file.
+touch youtube_dl/version.py
+
+PREFIX=$prefix PYTHON=/usr/local/bin/python3 make install
 
 
 cd -
