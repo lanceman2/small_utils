@@ -1,0 +1,64 @@
+#!/bin/bash
+
+tag=3510200
+
+name=sqlite-autoconf
+tarname=${name}-$tag
+tarfile=$tarname.tar.gz
+tar_option=z  #tar.gz file
+url=https://sqlite.org/2026/${tarfile}
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+prefix=/usr/local/encap/$tarnameTry
+
+sha512sum=
+
+case "$tag" in
+    fooo.4.5.5.5.5)
+        sha512sum=
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -x${tar_option}f ../$tarfile
+
+
+./configure --prefix="${prefix}"
+make
+make install
+
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+
