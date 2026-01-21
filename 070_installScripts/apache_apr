@@ -17,12 +17,11 @@ while [ -d "${tarnameTry}" ] ; do
 done
 builddir="${tarnameTry}"
 
-
-url=https://dlcdn.apache.org/${name}/${tarname}.tar.bz2
+tarfile=$tarname.tar.bz2
+url=https://dlcdn.apache.org/${name}/${tarfile}
 
 prefix=/usr/local/encap/$tarnameTry
 
-tarfile=$tarname.tar.gz
 
 sha512sum=
 
@@ -54,7 +53,6 @@ tar --strip-components=1 -xjf ../$tarfile
 ./configure --prefix="${prefix}"
 make
 make install
-
 
 
 set +x
