@@ -46,8 +46,8 @@ apt install -y\
  libdecor-0-dev\
  libxml2-dev\
  cscope\
- tree
-
+ tree\
+ pax-utils
 
 dpkg --add-architecture i386
 apt update
