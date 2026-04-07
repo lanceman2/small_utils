@@ -1,7 +1,8 @@
 #!/bin/bash
 
 
-tag=3.20.0
+#tag=3.20.0
+tag=3.26.0
 
 tarname=valgrind-$tag
 
