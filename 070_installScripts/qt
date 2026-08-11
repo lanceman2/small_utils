@@ -1,0 +1,79 @@
+#!/bin/bash
+
+
+tag=6.11.1
+
+tarname=qt-everywhere-src-$tag
+
+
+set -exo pipefail
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+topdir=$PWD
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://download.qt.io/official_releases/qt/6.11/$tag/single/$tarname.tar.xz
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.xz
+
+
+sha512sum=
+
+case "$tag" in
+
+    6.11.1)
+        sha512sum=57b61c84a765338e7f3ff8a1f7977ab0507c6d8\
+e1ea29377dcce0249e2fcd6520a044383464ca6b63c8f54b5ce36461e\
+481f94792ddc78e5c429cc2d824b2a6e 
+        ;;
+esac
+
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget --no-check-certificate $url -O $tarfile
+fi
+
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+
+tar --strip-components=1 -xJf ../$tarfile
+
+
+
+mkdir BUILD
+cd BUILD
+
+cmake ..\
+ -DCMAKE_INSTALL_PREFIX:PATH="${prefix}"
+
+make VERBOSE=1
+# parallel make fails.
+#make VERBOSE=1 -j $(nproc)
+make install
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
