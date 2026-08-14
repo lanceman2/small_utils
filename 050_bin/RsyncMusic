@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -ex
+
+from_dir="${HOME}/Music/"
+to_dir="/media/lance/76A0-07EC/Music/"
+
+exec rsync --delete -avv "$from_dir" "$to_dir"
+
