@@ -4,5 +4,7 @@ set -ex
 
 cd ${HOME}/Music/
 
-exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1
+#exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1
+
+exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1 -D "{album_artist}-{album}" -F "{track}-{title}"
 
