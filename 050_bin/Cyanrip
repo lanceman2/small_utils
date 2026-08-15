@@ -2,9 +2,15 @@
 
 set -ex
 
+note="Note: the music files generated will not be complete until this finishes running!"
+
 cd ${HOME}/Music/
 
 #exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1
 
-exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1 -D "{album_artist}-{album}" -F "{track}-{title}"
+echo "$note"
+
+# Note: we add arguments to the end of the command-line with $*
+
+exec cyanrip -T simple -d /dev/sr0 -s 0 -R 1 -D "{album_artist}-{album}" -F "{track}-{title}" $*
 
