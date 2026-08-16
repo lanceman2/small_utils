@@ -2,13 +2,15 @@
 
 set -ex
 
-from_dir="${HOME}/Music/"
-to_dir="/media/lance/76A0-07EC/Music/"
-cd
+from="${HOME}/"
+to="/media/lance/76A0-07EC/"
 
-# I tried to use: rsync --delete -av "$from_dir" "$to_dir"
+# I tried to use: rsync --delete -av FROM TO
 # But it did not seem to stop the recopying of files.
 
-rsync --delete -ruv "$from_dir" "$to_dir"
+for dir in Music Playlists ; do
+    rsync --delete -ruv "$from/$dir/" "$to/$dir/"
+done
+
 sync
 
