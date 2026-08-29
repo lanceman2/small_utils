@@ -2,8 +2,8 @@
 
 set -ex
 
-from="${HOME}/"
-to="/media/lance/76A0-07EC/"
+from="${HOME}"
+to="/media/lance/76A0-07EC"
 
 # I tried to use: rsync --delete -av FROM TO
 # But it did not seem to stop the recopying of files.
