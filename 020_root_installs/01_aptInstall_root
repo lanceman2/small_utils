@@ -9,7 +9,7 @@ set -euxo pipefail
 
 
 # Ports: Debian 9 and Ubuntu 18.04, 20.04, and 22.04
-# Debian 12.7
+# Debian 12.7, Debian 13.6
 
 apt install -y\
  build-essential\
@@ -21,6 +21,7 @@ apt install -y\
  libgtk-3-doc\
  devhelp\
  sox\
+ libsox-fmt-all\
  at\
  imagemagick-doc\
  imagemagick\
@@ -42,12 +43,16 @@ apt install -y\
  libtree\
  gdb\
  cmake\
+ meson\
  libgbm-dev\
  libdecor-0-dev\
  libxml2-dev\
  cscope\
  tree\
- pax-utils
+ pax-utils\
+ libfftw3-dev\
+ libfftw3-doc
+
 
 dpkg --add-architecture i386
 apt update
