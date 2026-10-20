@@ -51,7 +51,9 @@ apt install -y\
  tree\
  pax-utils\
  libfftw3-dev\
- libfftw3-doc
+ libfftw3-doc\
+ ffmpeg
+
 
 
 dpkg --add-architecture i386
