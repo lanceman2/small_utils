@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# The big question is whither to save a mp3 or a flac music file.
+#
+# Dependences:
+#   yt-dlp seems to require nodejs at runtime
+#
+#   used "apt install nodejs"
+#
+
+type=mp3
+dir=
+
+
+function cleanup() {
+
+    set -x
+    rm -rf "$dir"
+    set +x
+    #echo "Cleaned up"
+}
+
+
+function usage() {
+
+    cat << EOF
+
+    Usage: $0 URL FILENAME
+
+  Download a youtube video and save just the audio.
+  Save the sound file as FILENAME.mp3
+  If the full path is not given, this will save the
+  file FILENAME.mp3 in the current directory.
+
+EOF
+    exit 1
+}
+
+if [[ $# -lt 2 ]]; then
+    usage
+fi
+
+set -ex
+
+dir="$(mktemp --directory /tmp/GetMusic_XXXXXXXXXX)"
+
+trap cleanup EXIT
+
+video_file="$dir/video.webm"
+
+yt-dlp "${1}" --output "$dir/video.webm"
+ffmpeg -i "$video_file" -c:a $type "${2}.$type"
+
+set +x
+echo "SUCCESS"
+
+exit 0
+

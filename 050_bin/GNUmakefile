@@ -35,6 +35,7 @@ bin =\
  LinesOfCCode\
  Cyanrip\
  RsyncMusic\
+ GetMusic\
  $(built_image_bins)
 
 # These files are generated
