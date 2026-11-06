@@ -15,7 +15,7 @@ dir=
 function cleanup() {
 
     set -x
-    rm -rf "$dir"
+    #rm -rf "$dir"
     set +x
     #echo "Cleaned up"
 }
@@ -46,10 +46,12 @@ dir="$(mktemp --directory /tmp/GetMusic_XXXXXXXXXX)"
 
 trap cleanup EXIT
 
-video_file="$dir/video.webm"
+video_file="$dir/video"
 
-yt-dlp "${1}" --output "$dir/video.webm"
-ffmpeg -i "$video_file" -c:a $type "${2}.$type"
+yt-dlp "${1}" --output "$video_file"
+# There appears to be possible file suffix change, so we use the wild-card
+# ${video_file}* as the ffmpeg input filename.
+ffmpeg -i ${video_file}* -c:a $type "${2}.$type"
 
 set +x
 echo "SUCCESS"
